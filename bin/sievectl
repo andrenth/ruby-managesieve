@@ -14,7 +14,7 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
-# $Id: sievectl,v 1.3 2004/12/27 11:15:00 andre Exp $
+# $Id: sievectl,v 1.4 2004/12/27 17:09:14 andre Exp $
 #
 
 begin
@@ -65,19 +65,20 @@ class ConfigFile < File
   def ConfigFile.create_template(name)
     STDERR.puts <<-__EOF__
 * Could not find configuration file #{name}.
-* A template file will be created. Please edit the <bracketed> values to fit
-* your local configuration and run ``#{File::basename $0}'' again.
+* A template file will be created. Please edit the values to fit your
+* local configuration and run `#{File::basename $0}' again.
     __EOF__
 
     begin
       file = File::open(name, 'w+')
       file.puts <<-__EOF__
-host:     <server>
-port:     <port>
-user:     <username>
-euser:    <effective username>
-password: <password>
-auth:     <authentication method>
+accountname:
+  host:     servername
+  port:     port
+  user:     username
+  euser:    effectiveusername
+  password: password
+  auth:     authmethod
       __EOF__
     rescue => e
       raise "Cannot create template configuration file: #{e}"
@@ -86,15 +87,19 @@ auth:     <authentication method>
 end
 
 def usage
-  STDERR.puts <<__EOF__
-Usage: #{File::basename($0)} <caps|list|show|activate|add|addactive|del> [script name]
-__EOF__
+  prog = File::basename $0
+  STDERR.puts <<-__EOF__
+Usage:
+  #{prog} <caps|list|show|activate|add|addactive|del> <account> [script name]
+  __EOF__
+  exit 1
 end
 
 def help
   prog = File::basename $0
-  puts <<__EOF__
-Usage: #{prog} <caps|list|show|activate|add|addactive|del> [script name]
+  puts <<-__EOF__
+Usage:
+  #{prog} <caps|list|show|activate|add|addactive|del> <account> [script name]
 
 Examples:
   List server capabilities:
@@ -113,7 +118,8 @@ Examples:
 
   Delete a script:
     #{prog} del scriptname
-__EOF__
+  __EOF__
+  exit 0
 end
 
 
@@ -121,24 +127,37 @@ end
 # Main
 #
 
+help if ARGV[0] =~ /^h(elp)?$/i
+
+account, action, name, file = ARGV
+usage if action.nil?
+
 file = ENV['HOME'] + '/.sievectlrc'
 begin
   conf = ConfigFile::open(file)
 rescue => e
-  STDERR.puts "Cannot load configuration file: #{e}"
+  STDERR.puts "Cannot load configuration file: `#{e}'"
   exit 1
 end
 
-m = ManageSieve.new(
-  :host     => conf['host'],
-  :port     => conf['port'],
-  :user     => conf['user'],
-  :euser    => conf['euser'],
-  :password => conf['password'],
-  :auth     => conf['auth']
-)
+unless conf.has_key? account
+  STDERR.puts <<-__EOF__
+* Configuration for account `#{account}' not found.
+* Maybe your configuration file is in the old format?
+  __EOF__
+  exit 1
+end
 
-action, name, file = ARGV
+info = conf[account]
+
+m = ManageSieve.new(
+  :host     => info['host'],
+  :port     => info['port'],
+  :user     => info['user'],
+  :euser    => info['euser'],
+  :password => info['password'],
+  :auth     => info['auth']
+)
 
 case action
 when /^cap(abilitie)?s$/
@@ -163,8 +182,6 @@ when /^addact(ive)?/
 when /^del(ete)?$/
   raise ArgumentError, "`activate' requires a script name" unless name
   m.delete_script(name)
-when /^h(elp)?$/
-  help
 else
   usage
 end

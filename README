@@ -58,12 +58,18 @@ The sievectl utility is a small program that allows you to manage your
 sieve scripts from the command line. It requires a config file located
 in $HOME/.sievectlrc, with a series of items in the form "name: value":
 
-host:     sieve.mydomain.tld
-port:     2000
-user:     johndoe
-euser:    johndoe
-password: secret
-auth:     PLAIN
+mydomain:
+  host:     sieve.mydomain.tld
+  port:     2000
+  user:     johndoe
+  euser:    johndoe
+  password: secret
+  auth:     PLAIN
+
+In the example above, "mydomain" is the name of the account, and the
+indented variables below it are valid for that account only. Other
+accounts can be added, as long as they have different names. Indentation
+must be preserved.
 
 The "port", "euser" and "auth" variables are optional, and their default
 values are, respectively, 2000, the value of the "user" variable, and
