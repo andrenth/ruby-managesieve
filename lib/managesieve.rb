@@ -25,7 +25,7 @@
 # See the ManageSieve class for documentation and examples.
 #
 #--
-# $Id: managesieve.rb,v 1.7 2004/12/29 13:46:10 andre Exp $
+# $Id: managesieve.rb,v 1.8 2005/01/07 17:30:37 andre Exp $
 #++
 #
 
@@ -76,7 +76,7 @@ class SieveResponseError < Exception; end
 #  )
 #
 #  # List installed scripts
-#  m.each_script do |name, active|
+#  m.scripts.sort do |name, active|
 #    print name
 #    print active ? " (active)\n" : "\n"
 #  end
@@ -136,17 +136,20 @@ class ManageSieve
   end
 
   
-  # Calls the given block for each script stored on the server, passing
-  # its name and status as parameters. The status is either 'ACTIVE' or
-  # nil.
-  def each_script
+  # If a block is given, calls it for each script stored on the server,
+  # passing its name and status as parameters. Else, and array
+  # of [ +name+, +status+ ] arrays is returned. The status is either
+  # 'ACTIVE' or nil.
+  def scripts
     begin
       scripts = send_command('LISTSCRIPTS')
     rescue SieveCommandError => e
       raise e, "Cannot list scripts: #{e}"
     end
+    return scripts unless block_given?
     scripts.each { |name, status| yield(name, status) }
   end
+  alias :each_script :scripts
 
   # Returns the contents of +script+ as a string.
   def get_script(script)
