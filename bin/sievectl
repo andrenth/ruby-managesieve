@@ -14,7 +14,7 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
-# $Id: sievectl,v 1.1 2004/12/20 17:49:51 andre Exp $
+# $Id: sievectl,v 1.2 2004/12/27 11:05:52 andre Exp $
 #
 
 begin
@@ -50,11 +50,38 @@ class ManageSieve
 end
 
 class ConfigFile < File
-  def ConfigFile.open(*args)
-    file = super(*args)
-    conf = YAML::load(file)
-    file.close
-    return conf
+  def ConfigFile.open(name)
+    begin
+      file = super(name)
+      conf = YAML::load(file)
+      file.close
+      return conf
+    rescue Errno::ENOENT
+      ConfigFile::create_template(name)
+    end
+  end
+
+  private
+  def ConfigFile.create_template(name)
+    STDERR.puts <<-__EOF__
+* Could not find configuration file #{name}.
+* A template file will be created. Please edit the <bracketed> values to fit
+* your local configuration and run ``#{File::basename $0}'' again.
+    __EOF__
+
+    begin
+      file = File::open(name, 'w+')
+      file.puts <<-__EOF__
+host:     <server>
+port:     <port>
+user:     <username>
+euser:    <effective username>
+password: <password>
+auth:     <authentication method>
+      __EOF__
+    rescue => e
+      raise "Cannot create template configuration file: #{e}"
+    end
   end
 end
 
@@ -94,7 +121,13 @@ end
 # Main
 #
 
-conf = ConfigFile::open(ENV['HOME'] + '/.sievectlrc')
+file = ENV['HOME'] + '/.sievectlrc'
+begin
+  conf = ConfigFile::open(file)
+rescue => e
+  STDERR.puts "Cannot load configuration file: #{e}"
+  exit 1
+end
 
 m = ManageSieve.new(
   :host     => conf['host'],
