@@ -73,7 +73,7 @@
 #        sievectl del scriptname
 #
 #--
-# $Id: sievectl,v 1.9 2004/12/28 18:39:40 andre Exp $
+# $Id: sievectl,v 1.10 2004/12/29 13:51:13 andre Exp $
 #++
 #
 
@@ -208,6 +208,8 @@ def usage(quit=true) # :nodoc: #
 Usage: #{prog} <account> <action> [script name]
 Action is one of:
   capabilities, list, show, activate, deactivate, add, addactive, delete
+
+You can also try `#{prog} help' for usage examples.
   __EOF__
   exit 1 if quit
 end
@@ -278,23 +280,27 @@ sievectl = SieveCtl.new(
   :auth     => info['auth']
 )
 
-case action
-when /^act(ivate)?$/
-  sievectl.activate(name)
-when /^add$/
-  sievectl.add(name, file)
-when /^addact(ive)?/
-  sievectl.add_active(name, file)
-when /^cap(abilitie)?s$/
-  sievectl.print_capabilities
-when /^deact(ivate)?$/
-  sievectl.deactivate(name)
-when /^del(ete)?$/
-  sievectl.delete(name)
-when /^list$/
-  sievectl.list
-when /^show$/
-  sievectl.show(name)
-else
-  usage
+begin
+  case action
+  when /^act(ivate)?$/
+    sievectl.activate(name)
+  when /^add$/
+    sievectl.add(name, file)
+  when /^addact(ive)?/
+    sievectl.add(name, file, true)
+  when /^cap(abilitie)?s$/
+    sievectl.print_capabilities
+  when /^deact(ivate)?$/
+    sievectl.deactivate(name)
+  when /^del(ete)?$/
+    sievectl.delete(name)
+  when /^list$/
+    sievectl.list
+  when /^show$/
+    sievectl.show(name)
+  else
+    usage
+  end
+rescue SieveCommandError => e
+  STDERR.puts "* #{e}"
 end
