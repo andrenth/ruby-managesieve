@@ -75,7 +75,7 @@
 #        sievectl del scriptname
 #
 #--
-# $Id: sievectl,v 1.12 2005/01/07 18:12:42 andre Exp $
+# $Id: sievectl,v 1.13 2005/01/13 13:25:52 andre Exp $
 #++
 #
 
@@ -195,6 +195,7 @@ class SieveCtl
     raise ArgumentError, "`#{action}' requires a script name" unless script
     data = file ? File.open(file).readlines : STDIN.readlines
     @manage_sieve.put_script(script, data.to_s)
+    activate script if active
   end
 
   # Deletes +script+
