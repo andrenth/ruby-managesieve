@@ -25,7 +25,7 @@
 # See the ManageSieve class for documentation and examples.
 #
 #--
-# $Id: managesieve.rb,v 1.9 2005/01/17 11:25:01 andre Exp $
+# $Id: managesieve.rb,v 1.10 2005/01/17 11:25:56 andre Exp $
 #++
 #
 
@@ -36,7 +36,7 @@ require 'socket'
 # Define our own Base64.encode64 for compatibility with ruby <= 1.8.1, which
 # defines encode64() at the top level.
 #
-module Base64
+module Base64 # :nodoc:
   def encode64(s)
     [s].pack('m')
   end
