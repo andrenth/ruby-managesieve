@@ -25,7 +25,7 @@
 # See the ManageSieve class for documentation and examples.
 #
 #--
-# $Id: managesieve.rb,v 1.3 2004/12/20 18:34:32 andre Exp $
+# $Id: managesieve.rb,v 1.4 2004/12/27 20:21:07 andre Exp $
 #++
 #
 
@@ -144,7 +144,7 @@ class ManageSieve
     rescue SieveCommandError => e
       raise e, "Cannot get script: #{e}"
     end
-    return data.to_s
+    return data.to_s.chomp
   end
 
   # Uploads +script+ to the server, using +data+ as its contents.
