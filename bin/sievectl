@@ -14,7 +14,7 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
-# $Id: sievectl,v 1.6 2004/12/27 19:15:44 andre Exp $
+# $Id: sievectl,v 1.7 2004/12/27 20:20:12 andre Exp $
 #
 
 begin
@@ -86,6 +86,54 @@ accountname:
   end
 end
 
+class SieveCtl
+  def initialize(conf)
+    @manage_sieve = ManageSieve.new(conf)
+  end
+
+  def capabilities
+    @manage_sieve.print_capabilities
+  end
+
+  def list
+    @manage_sieve.print_scripts
+  end
+
+  def show(name)
+    raise ArgumentError, "`show' requires a script name" unless name
+    puts @manage_sieve.get_script(name)
+  end
+
+  def activate(name)
+    raise ArgumentError, "`activate' requires a script name" unless name
+    @manage_sieve.set_active(name)
+  end
+
+  def deactivate(name)
+    raise ArgumentError, "`deactivate' requires a script name" unless name
+    script = @manage_sieve.get_script(name)
+    @manage_sieve.delete_script(name)
+    @manage_sieve.put_script(name, script)
+  end
+
+  def add(name, file=nil)
+    raise ArgumentError, "`add' requires a script name" unless name
+    script = file ? File.open(file).readlines : STDIN.readlines
+    @manage_sieve.put_script(name, script.to_s)
+  end
+
+  def add_active(name, file=nil)
+    raise ArgumentError, "`addactive' requires a script name" unless name
+    add(name, file)
+    @manage_sieve.set_active(name)
+  end
+
+  def delete(name)
+    raise ArgumentError, "`activate' requires a script name" unless name
+    @manage_sieve.delete_script(name)
+  end
+end
+
 def usage(quit=true)
   prog = File::basename $0
   STDERR.puts <<-__EOF__
@@ -153,7 +201,7 @@ end
 
 info = conf[account]
 
-m = ManageSieve.new(
+sievectl = SieveCtl.new(
   :host     => info['host'],
   :port     => info['port'],
   :user     => info['user'],
@@ -163,33 +211,22 @@ m = ManageSieve.new(
 )
 
 case action
-when /^cap(abilitie)?s$/
-  m.print_capabilities
-when /^list$/
-  m.print_scripts
-when /^show$/
-  raise ArgumentError, "`show' requires a script name" unless name
-  puts m.get_script(name)
 when /^act(ivate)?$/
-  raise ArgumentError, "`activate' requires a script name" unless name
-  m.set_active(name)
-when /^deact(ivate)?$/
-  raise ArgumentError, "`deactivate' requires a script name" unless name
-  script = m.get_script(name)
-  m.delete_script(name)
-  m.put_script(name, script)
+  sievectl.activate(name)
 when /^add$/
-  raise ArgumentError, "`add' requires a script name" unless name
-  script = file ? File.open(file).readlines : STDIN.readlines
-  m.put_script(name, script.to_s)
+  sievectl.add(name, file)
 when /^addact(ive)?/
-  raise ArgumentError, "`add' requires a script name" unless name
-  script = file ? File.open(file).readlines : STDIN.readlines
-  m.put_script(name, script.to_s)
-  m.set_active(name)
+  sievectl.add_active(name, file)
+when /^cap(abilitie)?s$/
+  sievectl.print_capabilities
+when /^deact(ivate)?$/
+  sievectl.deactivate(name)
 when /^del(ete)?$/
-  raise ArgumentError, "`activate' requires a script name" unless name
-  m.delete_script(name)
+  sievectl.delete(name)
+when /^list$/
+  sievectl.list
+when /^show$/
+  sievectl.show(name)
 else
   usage
 end
