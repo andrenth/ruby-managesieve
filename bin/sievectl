@@ -75,7 +75,7 @@
 #        sievectl del scriptname
 #
 #--
-# $Id: sievectl,v 1.16 2005/01/24 12:15:52 andre Exp $
+# $Id: sievectl,v 1.17 2005/02/02 16:32:47 andre Exp $
 #++
 #
 
@@ -136,7 +136,7 @@ class ConfigFile < File # :nodoc:
     __EOF__
 
     begin
-      file = File::open(name, 'w+')
+      file = File.new(name, 'w', 0600)
       file.puts <<-__EOF__
 accountname:
   host:     servername
