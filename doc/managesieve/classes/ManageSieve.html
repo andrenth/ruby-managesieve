@@ -1,0 +1,547 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>Class: ManageSieve</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta http-equiv="Content-Script-Type" content="text/javascript" />
+	<link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+	<script type="text/javascript">
+	// <![CDATA[
+
+	function popupCode( url ) {
+		window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+	}
+
+	function toggleCode( id ) {
+		if ( document.getElementById )
+			elem = document.getElementById( id );
+		else if ( document.all )
+			elem = eval( "document.all." + id );
+		else
+			return false;
+
+		elemStyle = elem.style;
+		
+		if ( elemStyle.display != "block" ) {
+			elemStyle.display = "block"
+		} else {
+			elemStyle.display = "none"
+		}
+
+		return true;
+	}
+	
+	// Make codeblocks hidden by default
+	document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+	
+	// ]]>
+	</script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <h1>ManageSieve <sup class="type-note">(Class)</sup></h1>
+        <table class="header-table">
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../files/managesieve_rb.html">
+                managesieve.rb
+                </a>
+				<br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                Object
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+	<div id="bodyContent">
+
+
+	<div id="contextContent">
+
+		<div id="description">
+			<p>
+<a href="ManageSieve.html">ManageSieve</a> implements MANAGESIEVE, a
+protocol for remote management of <a
+href="http://www.cyrusoft.com/sieve/">Sieve</a> scripts.
+</p>
+<p>
+The following MANAGESIEVE commands are implemented:
+</p>
+<ul>
+<li>CAPABILITY
+
+</li>
+<li>DELETESCRIPT
+
+</li>
+<li>GETSCRIPT
+
+</li>
+<li>HAVESPACE
+
+</li>
+<li>LISTSCRIPTS
+
+</li>
+<li>LOGOUT
+
+</li>
+<li>PUTSCRIPT
+
+</li>
+<li>SETACTIVE
+
+</li>
+</ul>
+<p>
+The AUTHENTICATE command is partially implemented. Currently the
+<tt>LOGIN</tt> and <tt>PLAIN</tt> authentication mechanisms are
+implemented.
+</p>
+<h1>Example</h1>
+<pre>
+ # Create a new ManageSieve instance
+ m = ManageSieve.new(
+   :host     =&gt; 'sievehost.mydomain.com',
+   :port     =&gt; 2000,
+   :user     =&gt; 'johndoe',
+   :password =&gt; 'secret',
+   :auth     =&gt; 'PLAIN'
+ )
+
+ # List installed scripts
+ m.each_script do |name, active|
+   print name
+   print active ? &quot; (active)\n&quot; : &quot;\n&quot;
+ end
+
+ script = &lt;&lt;__EOF__
+ require &quot;fileinto&quot;;
+ if header :contains [&quot;to&quot;, &quot;cc&quot;] &quot;ruby-talk@ruby-lang.org&quot; {
+   fileinto &quot;Ruby-talk&quot;;
+ }
+ __EOF__
+
+ # Test if there's enough space for script 'foobar'
+ puts m.have_space?('foobar', script.length)
+
+ # Upload it
+ m.put_script('foobar', script)
+
+ # Show its contents
+ puts m.get_script('foobar')
+
+ # Close the connection
+ m.logout
+</pre>
+
+		</div>
+
+
+		<div id="method-list">
+			<h2 class="section-bar">Methods</h2>
+
+			<div class="name-list">
+			<a href="#M000005">delete_script</a>&nbsp;&nbsp;
+			<a href="#M000002">each_script</a>&nbsp;&nbsp;
+			<a href="#M000003">get_script</a>&nbsp;&nbsp;
+			<a href="#M000007">have_space?</a>&nbsp;&nbsp;
+			<a href="#M000009">logout</a>&nbsp;&nbsp;
+			<a href="#M000001">new</a>&nbsp;&nbsp;
+			<a href="#M000004">put_script</a>&nbsp;&nbsp;
+			<a href="#M000006">set_active</a>&nbsp;&nbsp;
+			<a href="#M000008">supports_tls?</a>&nbsp;&nbsp;
+			</div>
+		</div>
+
+		<div id="constants-list">
+			<h2 class="section-bar">Constants</h2>
+
+			<div class="name-list">
+				<table summary="Constants">
+				<tr class="top-aligned-row context-row">
+					<td class="context-item-name">SIEVE_PORT</td>
+					<td>=</td>
+					<td class="context-item-value">2000</td>
+				</tr>
+				</table>
+			</div>
+		</div>
+
+
+
+		<div id="attribute-list">
+			<h2 class="section-bar">Attributes</h2>
+
+			<div class="name-list">
+				<table>
+				<tr class="top-aligned-row context-row">
+					<td class="context-item-name">capabilities</td>
+					<td class="context-item-value">&nbsp;[R]&nbsp;</td>
+					<td class="context-item-desc"></td>
+				</tr>
+				<tr class="top-aligned-row context-row">
+					<td class="context-item-name">euser</td>
+					<td class="context-item-value">&nbsp;[R]&nbsp;</td>
+					<td class="context-item-desc"></td>
+				</tr>
+				<tr class="top-aligned-row context-row">
+					<td class="context-item-name">host</td>
+					<td class="context-item-value">&nbsp;[R]&nbsp;</td>
+					<td class="context-item-desc"></td>
+				</tr>
+				<tr class="top-aligned-row context-row">
+					<td class="context-item-name">login_mechs</td>
+					<td class="context-item-value">&nbsp;[R]&nbsp;</td>
+					<td class="context-item-desc"></td>
+				</tr>
+				<tr class="top-aligned-row context-row">
+					<td class="context-item-name">port</td>
+					<td class="context-item-value">&nbsp;[R]&nbsp;</td>
+					<td class="context-item-desc"></td>
+				</tr>
+				<tr class="top-aligned-row context-row">
+					<td class="context-item-name">user</td>
+					<td class="context-item-value">&nbsp;[R]&nbsp;</td>
+					<td class="context-item-desc"></td>
+				</tr>
+				</table>
+			</div>
+		</div>
+			
+
+	</div>
+
+
+
+		<!-- if includes -->
+
+
+		<!-- if method_list -->
+		<div id="methods">
+			<h2 class="section-bar">Public Class methods</h2>
+
+			<div id="method-M000001" class="method-detail">
+				<a name="M000001"></a>
+
+				<div class="method-heading">
+					<a href="#M000001" class="method-signature">
+					<span class="method-name">new</span><span class="method-args">(info)</span>
+					</a>
+				</div>
+			
+				<div class="method-description">
+					<p>
+Create a new <a href="ManageSieve.html">ManageSieve</a> instance. The
+<tt>info</tt> parameter is a hash with the following keys:
+</p>
+<dl>
+<dt><em>:host</em></dt><dd>the sieve server
+
+</dd>
+<dt><em>:port</em></dt><dd>the sieve port (defaults to 2000)
+
+</dd>
+<dt><em>:user</em></dt><dd>the name of the user
+
+</dd>
+<dt><em>:euser</em></dt><dd>the name of the effective user (defaults to +:user+)
+
+</dd>
+<dt><em>:password</em></dt><dd>the password of the user
+
+</dd>
+<dt><em>:auth_mech</em></dt><dd>the authentication mechanism (defaults to +&quot;ANONYMOUS&quot;+)
+
+</dd>
+</dl>
+					<p><a class="source-toggle" href="#"
+					  onclick="toggleCode('M000001-source');return false;">[Source]</a></p>
+					<div class="method-source-code" id="M000001-source">
+<pre>
+<span class="ruby-comment cmt"># File managesieve.rb, line 106</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">info</span>)
+    <span class="ruby-ivar">@host</span>      = <span class="ruby-identifier">info</span>[<span class="ruby-identifier">:host</span>]
+    <span class="ruby-ivar">@port</span>      = <span class="ruby-identifier">info</span>[<span class="ruby-identifier">:port</span>] <span class="ruby-operator">||</span> <span class="ruby-value">2000</span>
+    <span class="ruby-ivar">@user</span>      = <span class="ruby-identifier">info</span>[<span class="ruby-identifier">:user</span>]
+    <span class="ruby-ivar">@euser</span>     = <span class="ruby-identifier">info</span>[<span class="ruby-identifier">:euser</span>] <span class="ruby-operator">||</span> <span class="ruby-ivar">@user</span>
+    <span class="ruby-ivar">@password</span>  = <span class="ruby-identifier">info</span>[<span class="ruby-identifier">:password</span>]
+    <span class="ruby-ivar">@auth_mech</span> = <span class="ruby-identifier">info</span>[<span class="ruby-identifier">:auth</span>] <span class="ruby-operator">||</span> <span class="ruby-value str">'ANONYMOUS'</span>
+
+    <span class="ruby-ivar">@capabilities</span>   = []
+    <span class="ruby-ivar">@login_mechs</span>    = []
+    <span class="ruby-ivar">@implementation</span> = <span class="ruby-value str">''</span>
+    <span class="ruby-ivar">@supports_tls</span>   = <span class="ruby-keyword kw">false</span>
+    <span class="ruby-ivar">@socket</span> = <span class="ruby-constant">TCPSocket</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@host</span>, <span class="ruby-ivar">@port</span>)
+
+    <span class="ruby-identifier">data</span> = <span class="ruby-identifier">get_response</span>
+    <span class="ruby-identifier">server_features</span>(<span class="ruby-identifier">data</span>)
+    <span class="ruby-identifier">authenticate</span>
+    <span class="ruby-ivar">@password</span> = <span class="ruby-keyword kw">nil</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+					</div>
+				</div>
+			</div>
+
+			<h2 class="section-bar">Public Instance methods</h2>
+
+			<div id="method-M000005" class="method-detail">
+				<a name="M000005"></a>
+
+				<div class="method-heading">
+					<a href="#M000005" class="method-signature">
+					<span class="method-name">delete_script</span><span class="method-args">(script)</span>
+					</a>
+				</div>
+			
+				<div class="method-description">
+					<p>
+Deletes <tt>script</tt> from the server.
+</p>
+					<p><a class="source-toggle" href="#"
+					  onclick="toggleCode('M000005-source');return false;">[Source]</a></p>
+					<div class="method-source-code" id="M000005-source">
+<pre>
+<span class="ruby-comment cmt"># File managesieve.rb, line 157</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete_script</span>(<span class="ruby-identifier">script</span>)
+    <span class="ruby-identifier">send_command</span>(<span class="ruby-value str">'DELETESCRIPT'</span>, <span class="ruby-identifier">sieve_name</span>(<span class="ruby-identifier">script</span>))
+  <span class="ruby-keyword kw">end</span>
+</pre>
+					</div>
+				</div>
+			</div>
+
+			<div id="method-M000002" class="method-detail">
+				<a name="M000002"></a>
+
+				<div class="method-heading">
+					<a href="#M000002" class="method-signature">
+					<span class="method-name">each_script</span><span class="method-args">() {|name, status| ...}</span>
+					</a>
+				</div>
+			
+				<div class="method-description">
+					<p>
+Calls the given block for each script stored on the server, passing its
+name and status as parameters. The status is either &#8216;ACTIVE&#8217; or
+nil.
+</p>
+					<p><a class="source-toggle" href="#"
+					  onclick="toggleCode('M000002-source');return false;">[Source]</a></p>
+					<div class="method-source-code" id="M000002-source">
+<pre>
+<span class="ruby-comment cmt"># File managesieve.rb, line 130</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each_script</span>
+    <span class="ruby-keyword kw">begin</span>
+      <span class="ruby-identifier">scripts</span> = <span class="ruby-identifier">send_command</span>(<span class="ruby-value str">'LISTSCRIPTS'</span>)
+    <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">SieveCommandError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-identifier">e</span>, <span class="ruby-value str">&quot;Cannot list scripts&quot;</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-identifier">scripts</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">name</span>, <span class="ruby-identifier">status</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">yield</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">status</span>) }
+  <span class="ruby-keyword kw">end</span>
+</pre>
+					</div>
+				</div>
+			</div>
+
+			<div id="method-M000003" class="method-detail">
+				<a name="M000003"></a>
+
+				<div class="method-heading">
+					<a href="#M000003" class="method-signature">
+					<span class="method-name">get_script</span><span class="method-args">(script)</span>
+					</a>
+				</div>
+			
+				<div class="method-description">
+					<p>
+Returns the contents of <tt>script</tt> as a string.
+</p>
+					<p><a class="source-toggle" href="#"
+					  onclick="toggleCode('M000003-source');return false;">[Source]</a></p>
+					<div class="method-source-code" id="M000003-source">
+<pre>
+<span class="ruby-comment cmt"># File managesieve.rb, line 140</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_script</span>(<span class="ruby-identifier">script</span>)
+    <span class="ruby-keyword kw">begin</span>
+      <span class="ruby-identifier">data</span> = <span class="ruby-identifier">send_command</span>(<span class="ruby-value str">'GETSCRIPT'</span>, <span class="ruby-identifier">sieve_name</span>(<span class="ruby-identifier">script</span>))
+    <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">SieveCommandError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-identifier">e</span>, <span class="ruby-node">&quot;Cannot get script: #{e}&quot;</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">data</span>.<span class="ruby-identifier">to_s</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+					</div>
+				</div>
+			</div>
+
+			<div id="method-M000007" class="method-detail">
+				<a name="M000007"></a>
+
+				<div class="method-heading">
+					<a href="#M000007" class="method-signature">
+					<span class="method-name">have_space?</span><span class="method-args">(script, size)</span>
+					</a>
+				</div>
+			
+				<div class="method-description">
+					<p>
+Returns true if there is space on the server to store <tt>script</tt> with
+size <tt>size</tt> and false otherwise.
+</p>
+					<p><a class="source-toggle" href="#"
+					  onclick="toggleCode('M000007-source');return false;">[Source]</a></p>
+					<div class="method-source-code" id="M000007-source">
+<pre>
+<span class="ruby-comment cmt"># File managesieve.rb, line 168</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">have_space?</span>(<span class="ruby-identifier">script</span>, <span class="ruby-identifier">size</span>)
+    <span class="ruby-keyword kw">begin</span>
+      <span class="ruby-identifier">args</span> = <span class="ruby-identifier">sieve_name</span>(<span class="ruby-identifier">script</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">' '</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">size</span>.<span class="ruby-identifier">to_s</span>
+      <span class="ruby-identifier">send_command</span>(<span class="ruby-value str">'HAVESPACE'</span>, <span class="ruby-identifier">args</span>)
+      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span>
+    <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">SieveCommandError</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+					</div>
+				</div>
+			</div>
+
+			<div id="method-M000009" class="method-detail">
+				<a name="M000009"></a>
+
+				<div class="method-heading">
+					<a href="#M000009" class="method-signature">
+					<span class="method-name">logout</span><span class="method-args">()</span>
+					</a>
+				</div>
+			
+				<div class="method-description">
+					<p>
+Disconnect from the server.
+</p>
+					<p><a class="source-toggle" href="#"
+					  onclick="toggleCode('M000009-source');return false;">[Source]</a></p>
+					<div class="method-source-code" id="M000009-source">
+<pre>
+<span class="ruby-comment cmt"># File managesieve.rb, line 184</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">logout</span>
+    <span class="ruby-identifier">send_command</span>(<span class="ruby-value str">'LOGOUT'</span>)
+    <span class="ruby-ivar">@socket</span>.<span class="ruby-identifier">close</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+					</div>
+				</div>
+			</div>
+
+			<div id="method-M000004" class="method-detail">
+				<a name="M000004"></a>
+
+				<div class="method-heading">
+					<a href="#M000004" class="method-signature">
+					<span class="method-name">put_script</span><span class="method-args">(script, data)</span>
+					</a>
+				</div>
+			
+				<div class="method-description">
+					<p>
+Uploads <tt>script</tt> to the server, using <tt>data</tt> as its contents.
+</p>
+					<p><a class="source-toggle" href="#"
+					  onclick="toggleCode('M000004-source');return false;">[Source]</a></p>
+					<div class="method-source-code" id="M000004-source">
+<pre>
+<span class="ruby-comment cmt"># File managesieve.rb, line 150</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">put_script</span>(<span class="ruby-identifier">script</span>, <span class="ruby-identifier">data</span>)
+    <span class="ruby-identifier">args</span> = <span class="ruby-identifier">sieve_name</span>(<span class="ruby-identifier">script</span>)
+    <span class="ruby-identifier">args</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">' '</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">sieve_string</span>(<span class="ruby-identifier">data</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">data</span>
+    <span class="ruby-identifier">send_command</span>(<span class="ruby-value str">'PUTSCRIPT'</span>, <span class="ruby-identifier">args</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+					</div>
+				</div>
+			</div>
+
+			<div id="method-M000006" class="method-detail">
+				<a name="M000006"></a>
+
+				<div class="method-heading">
+					<a href="#M000006" class="method-signature">
+					<span class="method-name">set_active</span><span class="method-args">(script)</span>
+					</a>
+				</div>
+			
+				<div class="method-description">
+					<p>
+Sets <tt>script</tt> as active.
+</p>
+					<p><a class="source-toggle" href="#"
+					  onclick="toggleCode('M000006-source');return false;">[Source]</a></p>
+					<div class="method-source-code" id="M000006-source">
+<pre>
+<span class="ruby-comment cmt"># File managesieve.rb, line 162</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_active</span>(<span class="ruby-identifier">script</span>)
+    <span class="ruby-identifier">send_command</span>(<span class="ruby-value str">'SETACTIVE'</span>, <span class="ruby-identifier">sieve_name</span>(<span class="ruby-identifier">script</span>))
+  <span class="ruby-keyword kw">end</span>
+</pre>
+					</div>
+				</div>
+			</div>
+
+			<div id="method-M000008" class="method-detail">
+				<a name="M000008"></a>
+
+				<div class="method-heading">
+					<a href="#M000008" class="method-signature">
+					<span class="method-name">supports_tls?</span><span class="method-args">()</span>
+					</a>
+				</div>
+			
+				<div class="method-description">
+					<p>
+Returns true if the server supports TLS and false otherwise.
+</p>
+					<p><a class="source-toggle" href="#"
+					  onclick="toggleCode('M000008-source');return false;">[Source]</a></p>
+					<div class="method-source-code" id="M000008-source">
+<pre>
+<span class="ruby-comment cmt"># File managesieve.rb, line 179</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">supports_tls?</span>
+    <span class="ruby-ivar">@supports_tls</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+
+
+	</div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

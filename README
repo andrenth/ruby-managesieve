@@ -1,0 +1,97 @@
+                           ruby-managesieve
+                           ~~~~~~~~~~~~~~~~
+
+
+0. INTRODUCTION
+1. REQUIREMENTS
+2. INSTALLATION
+3. LICENSE
+5. AUTHOR
+4, REFERENCES
+
+
+0. INTRODUCTION
+===============
+
+Ruby-managesieve is a pure-ruby library for the MANAGESIEVE
+protocol [1]. It allows programmatic control of Sieve [2] scripts, and
+implements the following commands described in the MANAGESIEVE draft:
+
+  * CAPABILITY
+  * DELETESCRIPT
+  * GETSCRIPT
+  * HAVESPACE
+  * LISTSCRIPTS
+  * LOGOUT
+  * PUTSCRIPT
+  * SETACTIVE
+
+The AUTHENTICATE command is partially implemented. Currently the LOGIN
+and PLAIN authentication mechanisms are implemented.
+
+Documentation is provided in the "doc" directory, and usage examples are
+provided in the "examples" directory.
+
+Some ideas from Ruby/ManageSieve were borrowed from
+python-managesieve [3], the Python implementation and Net_Sieve [4], the
+PHP implementation from the PEAR library.
+
+
+1. REQUIREMENTS
+===============
+
+Ruby/ManageSieve requires Ruby version 1.8.1.
+
+
+2. INSTALLATION
+===============
+
+Installation is straightforward: just run the command below (it requires
+privileges to write in the ruby library directory).
+
+# ruby install.rb
+
+This command installs the managesieve library in ruby's site-wide directory
+and the sievectl utility in ruby's bindir.
+
+To learn how to use sievectl, type "sievectl help".
+
+
+3. LICENSE
+==========
+
+Copyright (c) 2004 Andre Nathan <andre@digirati.com.br>
+
+Permission to use, copy, modify, and distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+
+4. AUTHOR
+=========
+
+Ruby/ManageSieve was developed by Andre Nathan.
+
+
+5. REFERENCES
+=============
+
+[1] The MANAGESIEVE draft: 
+    http://managesieve.rubyforge.org/draft-martin-managesieve-04.txt
+
+[2] The Sieve email filtering language
+    http://www.cyrusoft.com/sieve
+
+[3] Python-managesieve:
+    http://www.crazy-compilers.com/py-lib/managesieve.html
+
+[4] Net_Sieve:
+    http://pear.php.net/package/Net_Sieve

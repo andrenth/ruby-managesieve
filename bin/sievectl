@@ -1,0 +1,137 @@
+#!/usr/bin/env ruby
+#
+# Copyright (c) 2004 Andre Nathan <andre@digirati.com.br>
+#
+# Permission to use, copy, modify, and distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+#
+# $Id: sievectl,v 1.1 2004/12/20 17:49:51 andre Exp $
+#
+
+begin
+  require 'rubygems'
+rescue LoadError
+  nil
+end
+
+require 'managesieve'
+require 'yaml'
+
+class ManageSieve
+  def print_capabilities
+    puts 'Capabilities:'
+    @capabilities.each { |cap| puts "  - #{cap}" }
+
+    puts 'Login Mechanisms:'
+    @login_mechs.each { |mech| puts "  - #{mech}" }
+  end
+
+  def print_scripts
+    puts 'Available scripts:'
+    each_script do |name, active|
+      print "  - #{name}"
+      print active ? " (active)\n" : "\n"
+    end
+  end
+
+  def upload_script(name, script, active=false)
+    put_script(name, script)
+    set_active(name)
+  end
+end
+
+class ConfigFile < File
+  def ConfigFile.open(*args)
+    file = super(*args)
+    conf = YAML::load(file)
+    file.close
+    return conf
+  end
+end
+
+def usage
+  STDERR.puts <<__EOF__
+Usage: #{File::basename($0)} <caps|list|show|activate|add|addactive|del> [script name]
+__EOF__
+end
+
+def help
+  prog = File::basename $0
+  puts <<__EOF__
+Usage: #{prog} <caps|list|show|activate|add|addactive|del> [script name]
+
+Examples:
+  List server capabilities:
+    #{prog} caps
+
+  List available scripts:
+    #{prog} list
+
+  Show contents of a script:
+    #{prog} show scriptname
+
+  Add a script:
+    #{prog} add scriptname script.txt
+    or
+    cat script.txt | #{prog} add scriptname
+
+  Delete a script:
+    #{prog} del scriptname
+__EOF__
+end
+
+
+#
+# Main
+#
+
+conf = ConfigFile::open(ENV['HOME'] + '/.sievectlrc')
+
+m = ManageSieve.new(
+  :host     => conf['host'],
+  :port     => conf['port'],
+  :user     => conf['user'],
+  :euser    => conf['euser'],
+  :password => conf['password'],
+  :auth     => conf['auth']
+)
+
+action, name, file = ARGV
+
+case action
+when /^cap(abilitie)?s$/
+  m.print_capabilities
+when /^list$/
+  m.print_scripts
+when /^show$/
+  raise ArgumentError, "`show' requires a script name" unless name
+  puts m.get_script(name)
+when /^act(ivate)?$/
+  raise ArgumentError, "`activate' requires a script name" unless name
+  m.set_active(name)
+when /^add$/
+  raise ArgumentError, "`add' requires a script name" unless name
+  script = file ? File.open(file).readlines : STDIN.readlines
+  m.put_script(name, script.to_s)
+when /^addact(ive)?/
+  raise ArgumentError, "`add' requires a script name" unless name
+  script = file ? File.open(file).readlines : STDIN.readlines
+  m.put_script(name, script.to_s)
+  m.set_active(name)
+when /^del(ete)?$/
+  raise ArgumentError, "`activate' requires a script name" unless name
+  m.delete_script(name)
+when /^h(elp)?$/
+  help
+else
+  usage
+end
