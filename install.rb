@@ -1,4 +1,4 @@
-# $Id: install.rb,v 1.4 2004/12/28 18:35:40 andre Exp $
+# $Id: install.rb,v 1.5 2005/01/07 18:09:16 andre Exp $
 
 require 'fileutils'
 require 'rbconfig'
@@ -24,8 +24,8 @@ rescue => e
 end
 
 begin
-  system("rdoc --ri-site #{lib}")
   system("rdoc --ri-site #{bin}")
+  system("rdoc --ri-site #{lib}")
 rescue => e
   puts "Cannot generate RDoc: #{e}"
 end
