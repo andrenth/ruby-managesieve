@@ -14,7 +14,7 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
-# $Id: sievectl,v 1.4 2004/12/27 17:09:14 andre Exp $
+# $Id: sievectl,v 1.5 2004/12/27 19:00:08 andre Exp $
 #
 
 begin
@@ -90,7 +90,7 @@ def usage
   prog = File::basename $0
   STDERR.puts <<-__EOF__
 Usage:
-  #{prog} <caps|list|show|activate|add|addactive|del> <account> [script name]
+  #{prog} <account> <caps|list|show|activate|add|addactive|del> [script name]
   __EOF__
   exit 1
 end
@@ -99,7 +99,7 @@ def help
   prog = File::basename $0
   puts <<-__EOF__
 Usage:
-  #{prog} <caps|list|show|activate|add|addactive|del> <account> [script name]
+  #{prog} <account> <caps|list|show|activate|add|addactive|del> [script name]
 
 Examples:
   List server capabilities:
@@ -132,9 +132,8 @@ help if ARGV[0] =~ /^h(elp)?$/i
 account, action, name, file = ARGV
 usage if action.nil?
 
-file = ENV['HOME'] + '/.sievectlrc'
 begin
-  conf = ConfigFile::open(file)
+  conf = ConfigFile::open(ENV['HOME'] + '/.sievectlrc')
 rescue => e
   STDERR.puts "Cannot load configuration file: `#{e}'"
   exit 1
