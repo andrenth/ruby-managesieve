@@ -73,7 +73,7 @@
 #        sievectl del scriptname
 #
 #--
-# $Id: sievectl,v 1.8 2004/12/28 17:38:53 andre Exp $
+# $Id: sievectl,v 1.9 2004/12/28 18:39:40 andre Exp $
 #++
 #
 
@@ -189,7 +189,7 @@ class SieveCtl
   # Adds a script named +script+, from file +file+. If +file+ is +nil+, read
   # the script from +STDIN+. Activates the script is +active+ is true.
   def add(script, file=nil, active=false)
-    action = "add#{active?'active':''}"
+    action = "add#{active ? 'active' : ''}"
     raise ArgumentError, "`#{action}' requires a script name" unless script
     data = file ? File.open(file).readlines : STDIN.readlines
     @manage_sieve.put_script(script, data.to_s)
