@@ -14,7 +14,7 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
-# $Id: sievectl,v 1.5 2004/12/27 19:00:08 andre Exp $
+# $Id: sievectl,v 1.6 2004/12/27 19:15:44 andre Exp $
 #
 
 begin
@@ -86,20 +86,24 @@ accountname:
   end
 end
 
-def usage
+def usage(quit=true)
   prog = File::basename $0
   STDERR.puts <<-__EOF__
-Usage:
-  #{prog} <account> <caps|list|show|activate|add|addactive|del> [script name]
+Usage: #{prog} <account> <action> [script name]
+Action is one of:
+  capabilities, list, show, activate, deactivate, add, addactive, delete
   __EOF__
-  exit 1
+  exit 1 if quit
 end
 
 def help
   prog = File::basename $0
+  usage(false)
   puts <<-__EOF__
-Usage:
-  #{prog} <account> <caps|list|show|activate|add|addactive|del> [script name]
+
+Short forms for some actions are also accepted:
+  caps (capabilities), act (activate), deact (deactivate), addact (addactive),
+  del (delete)
 
 Examples:
   List server capabilities:
@@ -169,6 +173,11 @@ when /^show$/
 when /^act(ivate)?$/
   raise ArgumentError, "`activate' requires a script name" unless name
   m.set_active(name)
+when /^deact(ivate)?$/
+  raise ArgumentError, "`deactivate' requires a script name" unless name
+  script = m.get_script(name)
+  m.delete_script(name)
+  m.put_script(name, script)
 when /^add$/
   raise ArgumentError, "`add' requires a script name" unless name
   script = file ? File.open(file).readlines : STDIN.readlines
