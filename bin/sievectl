@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 #
+#--
 # Copyright (c) 2004 Andre Nathan <andre@digirati.com.br>
 #
 # Permission to use, copy, modify, and distribute this software for any
@@ -13,8 +14,67 @@
 # WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+#++
 #
-# $Id: sievectl,v 1.7 2004/12/27 20:20:12 andre Exp $
+# = Overview
+#
+# Sievectl is a utility that allows for management of
+# Sieve[http://www.cyrusoft.com/sieve/] scripts from the command line. It
+# supports multiple accounts, configured in the .sievectlrc file located in
+# the user's home directory.
+#
+# == Configuration file example
+#
+#  accountA:
+#    host:     sieve.accounta.tld
+#    port:     2000
+#    user:     johndoe
+#    euser:    johndoe
+#    password: secret
+#    auth:     PLAIN
+#
+#  accountB:
+#    host:     mail.accountb.tld
+#    user:     john
+#    password: secret
+#    auth:     PLAIN
+#
+# The +port+ and +euser+ parameters can be ommited, and will respectively
+# default to 2000 and the value of the +user+ parameter. If the +auth+
+# parameter is ommited, it will default to +ANONYMOUS+.
+#
+# == Usage and examples
+#
+#  $ sievectl help
+#  Usage: sievectl <account> <action> [script name]
+#  Action is one of:
+#    capabilities, list, show, activate, deactivate, add, addactive, delete
+#  
+#  Short forms for some actions are also accepted:
+#    caps (capabilities), act (activate), deact (deactivate), addact (addactive),
+#    del (delete)
+#  
+#    Examples:
+#      List server capabilities:
+#        sievectl caps
+#  
+#      List available scripts:
+#        sievectl list
+#  
+#      Show contents of a script:
+#        sievectl show scriptname
+#  
+#      Add a script:
+#        sievectl add scriptname script.txt
+#        or
+#        cat script.txt | sievectl add scriptname
+#  
+#      Delete a script:
+#        sievectl del scriptname
+#
+#--
+# $Id: sievectl,v 1.8 2004/12/28 17:38:53 andre Exp $
+#++
 #
 
 begin
@@ -26,7 +86,7 @@ end
 require 'managesieve'
 require 'yaml'
 
-class ManageSieve
+class ManageSieve # :nodoc:
   def print_capabilities
     puts 'Capabilities:'
     @capabilities.each { |cap| puts "  - #{cap}" }
@@ -49,7 +109,7 @@ class ManageSieve
   end
 end
 
-class ConfigFile < File
+class ConfigFile < File # :nodoc:
   def ConfigFile.open(name)
     begin
       file = super(name)
@@ -86,55 +146,63 @@ accountname:
   end
 end
 
+#
+# The SieveCtl class is a simple set of wrapper methods around the ones
+# available on the #ManageSieve class.
+#
 class SieveCtl
   def initialize(conf)
     @manage_sieve = ManageSieve.new(conf)
   end
 
+  # Prints the server capabilities.
   def capabilities
     @manage_sieve.print_capabilities
   end
 
+  # Lists the available scripts, specifying which one is active.
   def list
     @manage_sieve.print_scripts
   end
 
-  def show(name)
-    raise ArgumentError, "`show' requires a script name" unless name
-    puts @manage_sieve.get_script(name)
+  # Shows the contents of +script+.
+  def show(script)
+    raise ArgumentError, "`show' requires a script name" unless script
+    puts @manage_sieve.get_script(script)
   end
 
-  def activate(name)
-    raise ArgumentError, "`activate' requires a script name" unless name
-    @manage_sieve.set_active(name)
+  # Activates +script+.
+  def activate(script)
+    raise ArgumentError, "`activate' requires a script name" unless script
+    @manage_sieve.set_active(script)
   end
 
-  def deactivate(name)
-    raise ArgumentError, "`deactivate' requires a script name" unless name
-    script = @manage_sieve.get_script(name)
-    @manage_sieve.delete_script(name)
-    @manage_sieve.put_script(name, script)
+  # Deactivates +script+. There is no +DEACTIVATE+ command in the MANAGESIEVE
+  # draft, so we fetch the script, remove it and upload it again.
+  def deactivate(script)
+    raise ArgumentError, "`deactivate' requires a script name" unless script
+    data = @manage_sieve.get_script(script)
+    @manage_sieve.delete_script(script)
+    @manage_sieve.put_script(script, data)
   end
 
-  def add(name, file=nil)
-    raise ArgumentError, "`add' requires a script name" unless name
-    script = file ? File.open(file).readlines : STDIN.readlines
-    @manage_sieve.put_script(name, script.to_s)
+  # Adds a script named +script+, from file +file+. If +file+ is +nil+, read
+  # the script from +STDIN+. Activates the script is +active+ is true.
+  def add(script, file=nil, active=false)
+    action = "add#{active?'active':''}"
+    raise ArgumentError, "`#{action}' requires a script name" unless script
+    data = file ? File.open(file).readlines : STDIN.readlines
+    @manage_sieve.put_script(script, data.to_s)
   end
 
-  def add_active(name, file=nil)
-    raise ArgumentError, "`addactive' requires a script name" unless name
-    add(name, file)
-    @manage_sieve.set_active(name)
-  end
-
-  def delete(name)
-    raise ArgumentError, "`activate' requires a script name" unless name
-    @manage_sieve.delete_script(name)
+  # Deletes +script+
+  def delete(script)
+    raise ArgumentError, "`activate' requires a script name" unless script
+    @manage_sieve.delete_script(script)
   end
 end
 
-def usage(quit=true)
+def usage(quit=true) # :nodoc: #
   prog = File::basename $0
   STDERR.puts <<-__EOF__
 Usage: #{prog} <account> <action> [script name]
@@ -144,7 +212,7 @@ Action is one of:
   exit 1 if quit
 end
 
-def help
+def help # :nodoc:
   prog = File::basename $0
   usage(false)
   puts <<-__EOF__
