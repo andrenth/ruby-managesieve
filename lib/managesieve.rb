@@ -19,12 +19,13 @@
 # == Overview
 #
 # This library is a pure-ruby implementation of the MANAGESIEVE protocol, as
-# specified in draft-martin-managesieve-04.txt.
+# specified in its
+# {Internet Draft}[http://managesieve.rubyforge.org/draft-martin-managesieve-04.txt].
 #
 # See the ManageSieve class for documentation and examples.
 #
 #--
-# $Id: managesieve.rb,v 1.1 2004/12/20 17:49:51 andre Exp $
+# $Id: managesieve.rb,v 1.2 2004/12/20 18:10:58 andre Exp $
 #++
 #
 

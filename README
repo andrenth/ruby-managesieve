@@ -51,10 +51,12 @@ privileges to write in the ruby library directory).
 
 # ruby install.rb
 
-This command installs the managesieve library in ruby's site-wide directory
-and the sievectl utility in ruby's bindir.
+This command installs the managesieve library in ruby's site-wide
+directory and the sievectl utility in ruby's bindir.
 
-To learn how to use sievectl, type "sievectl help".
+The sievectl utility is a small program that allows you to manage your
+sieve scripts from the command line. To learn how to use sievectl, type
+"sievectl help".
 
 
 3. LICENSE
