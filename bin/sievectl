@@ -75,7 +75,7 @@
 #        sievectl del scriptname
 #
 #--
-# $Id: sievectl,v 1.15 2005/01/21 14:45:30 andre Exp $
+# $Id: sievectl,v 1.16 2005/01/24 12:15:52 andre Exp $
 #++
 #
 
@@ -111,7 +111,7 @@ class ManageSieve # :nodoc:
   end
 end
 
-class TemplateError # :nodoc:
+class TemplateError < Exception # :nodoc:
 end
 
 class ConfigFile < File # :nodoc:
