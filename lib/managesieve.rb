@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 #
 #--
-# Copyright (c) 2004 Andre Nathan <andre@digirati.com.br>
+# Copyright (c) 2004, 2005 Andre Nathan <andre@digirati.com.br>
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -25,7 +25,7 @@
 # See the ManageSieve class for documentation and examples.
 #
 #--
-# $Id: managesieve.rb,v 1.8 2005/01/07 17:30:37 andre Exp $
+# $Id: managesieve.rb,v 1.9 2005/01/17 11:25:01 andre Exp $
 #++
 #
 
