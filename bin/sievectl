@@ -73,7 +73,7 @@
 #        sievectl del scriptname
 #
 #--
-# $Id: sievectl,v 1.10 2004/12/29 13:51:13 andre Exp $
+# $Id: sievectl,v 1.11 2005/01/07 17:32:10 andre Exp $
 #++
 #
 
@@ -89,15 +89,15 @@ require 'yaml'
 class ManageSieve # :nodoc:
   def print_capabilities
     puts 'Capabilities:'
-    @capabilities.each { |cap| puts "  - #{cap}" }
+    @capabilities.sort.each { |cap| puts "  - #{cap}" }
 
     puts 'Login Mechanisms:'
-    @login_mechs.each { |mech| puts "  - #{mech}" }
+    @login_mechs.sort.each { |mech| puts "  - #{mech}" }
   end
 
   def print_scripts
     puts 'Available scripts:'
-    each_script do |name, active|
+    scripts.sort.each do |name, active|
       print "  - #{name}"
       print active ? " (active)\n" : "\n"
     end
@@ -289,7 +289,7 @@ begin
   when /^addact(ive)?/
     sievectl.add(name, file, true)
   when /^cap(abilitie)?s$/
-    sievectl.print_capabilities
+    sievectl.capabilities
   when /^deact(ivate)?$/
     sievectl.deactivate(name)
   when /^del(ete)?$/
