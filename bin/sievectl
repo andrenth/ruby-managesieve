@@ -75,7 +75,7 @@
 #        sievectl del scriptname
 #
 #--
-# $Id: sievectl,v 1.14 2005/01/17 11:25:01 andre Exp $
+# $Id: sievectl,v 1.15 2005/01/21 14:45:30 andre Exp $
 #++
 #
 
@@ -111,6 +111,9 @@ class ManageSieve # :nodoc:
   end
 end
 
+class TemplateError # :nodoc:
+end
+
 class ConfigFile < File # :nodoc:
   def ConfigFile.open(name)
     begin
@@ -120,6 +123,7 @@ class ConfigFile < File # :nodoc:
       return conf
     rescue Errno::ENOENT
       ConfigFile::create_template(name)
+      exit 0
     end
   end
 
@@ -143,7 +147,7 @@ accountname:
   auth:     authmethod
       __EOF__
     rescue => e
-      raise "Cannot create template configuration file: #{e}"
+      raise TemplateError, e
     end
   end
 end
@@ -261,6 +265,9 @@ usage if action.nil?
 
 begin
   conf = ConfigFile::open(ENV['HOME'] + '/.sievectlrc')
+rescue TemplateError => e
+  STDERR.puts "Cannot create template configuration file: #{e}"
+  exit 1
 rescue => e
   STDERR.puts "Cannot load configuration file: `#{e}'"
   exit 1
