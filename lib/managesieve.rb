@@ -25,7 +25,7 @@
 # See the ManageSieve class for documentation and examples.
 #
 #--
-# $Id: managesieve.rb,v 1.5 2004/12/28 19:38:36 andre Exp $
+# $Id: managesieve.rb,v 1.6 2004/12/29 13:25:10 andre Exp $
 #++
 #
 
@@ -266,10 +266,19 @@ class ManageSieve
     loop do
       data = get_line
 
-      # server response
-      m = /(OK|NO|BYE)( \((.*)\))?( (.*))?/.match(data)
-      yield :response, m.captures.values_at(0, 3) and next if m
-  
+      # server ok
+      m = /^OK$/.match(data)
+      yield :ok, m.captures.values_at(0, 3) and next if m
+
+      # server error
+      m = /^(NO|BYE)(.*)?$/.match(data)
+      if m
+        err, msg = m.captures
+        size = msg.scan(/\{(\d+)\+?\}/).to_s.to_i
+        yield :error, @socket.read(size.to_i + 2) and next if size > 0
+        yield :error, msg and next
+      end
+
       # quoted text
       m = /"([^"]*)"(\s"?([^"]*)"?)?$/.match(data)
       yield :quoted, m.captures.values_at(0,2) and next if m
@@ -289,10 +298,10 @@ class ManageSieve
     response = []
     parse_each_line do |flag, data|
       case flag
-      when :response
-        type, error = data
-        raise SieveResponseError, error unless type == 'OK'
+      when :ok
         return response
+      when :error
+        raise SieveResponseError, data
       else
         response << data
       end
