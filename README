@@ -1,4 +1,4 @@
-                           ruby-managesieve
+                           Ruby/ManageSieve
                            ~~~~~~~~~~~~~~~~
 
 
@@ -13,7 +13,7 @@
 0. INTRODUCTION
 ===============
 
-Ruby-managesieve is a pure-ruby library for the MANAGESIEVE
+Ruby/ManageSieve is a pure-ruby library for the MANAGESIEVE
 protocol [1]. It allows programmatic control of Sieve [2] scripts, and
 implements the following commands described in the MANAGESIEVE draft:
 
