@@ -1,4 +1,4 @@
-# $Id: install.rb,v 1.3 2004/12/28 17:41:40 andre Exp $
+# $Id: install.rb,v 1.4 2004/12/28 18:35:40 andre Exp $
 
 require 'fileutils'
 require 'rbconfig'
@@ -25,7 +25,7 @@ end
 
 begin
   system("rdoc --ri-site #{lib}")
-  system("rdoc --ri-site #{bin}/sievectl")
+  system("rdoc --ri-site #{bin}")
 rescue => e
   puts "Cannot generate RDoc: #{e}"
 end
