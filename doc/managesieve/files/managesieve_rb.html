@@ -1,74 +1,75 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <!DOCTYPE html 
      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-     "DTD/xhtml1-transitional.dtd">
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<title>File: managesieve.rb</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-	<meta http-equiv="Content-Script-Type" content="text/javascript" />
-	<link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
-	<script type="text/javascript">
-	// <![CDATA[
+  <title>File: managesieve.rb</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././sievectl" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
 
-	function popupCode( url ) {
-		window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-	}
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
 
-	function toggleCode( id ) {
-		if ( document.getElementById )
-			elem = document.getElementById( id );
-		else if ( document.all )
-			elem = eval( "document.all." + id );
-		else
-			return false;
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
 
-		elemStyle = elem.style;
-		
-		if ( elemStyle.display != "block" ) {
-			elemStyle.display = "block"
-		} else {
-			elemStyle.display = "none"
-		}
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
 
-		return true;
-	}
-	
-	// Make codeblocks hidden by default
-	document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
-	
-	// ]]>
-	</script>
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
 
 </head>
 <body>
 
 
 
-	<div id="fileHeader">
-		<h1>managesieve.rb</h1>
-		<table class="header-table">
-		<tr class="top-aligned-row">
-			<td><strong>Path:</strong></td>
-			<td>managesieve.rb
-			</td>
-		</tr>
-		<tr class="top-aligned-row">
-			<td><strong>Last Update:</strong></td>
-			<td>Mon Dec 20 16:34:32 BRST 2004</td>
-		</tr>
-		</table>
-	</div>
+  <div id="fileHeader">
+    <h1>managesieve.rb</h1>
+    <table class="header-table">
+    <tr class="top-aligned-row">
+      <td><strong>Path:</strong></td>
+      <td>managesieve.rb
+      </td>
+    </tr>
+    <tr class="top-aligned-row">
+      <td><strong>Last Update:</strong></td>
+      <td>Fri Jan 07 15:30:37 BRST 2005</td>
+    </tr>
+    </table>
+  </div>
   <!-- banner header -->
 
-	<div id="bodyContent">
+  <div id="bodyContent">
 
 
-	<div id="contextContent">
 
-		<div id="description">
-			<h2>Overview</h2>
+  <div id="contextContent">
+
+    <div id="description">
+      <h2>Overview</h2>
 <p>
 This library is a pure-ruby implementation of the MANAGESIEVE protocol, as
 specified in its <a
@@ -79,43 +80,38 @@ See the <a href="../classes/ManageSieve.html">ManageSieve</a> class for
 documentation and examples.
 </p>
 
-		</div>
+    </div>
 
-		<div id="requires-list">
-			<h2 class="section-bar">Required files</h2>
+    <div id="requires-list">
+      <h3 class="section-bar">Required files</h3>
 
-			<div class="name-list">
-			base64&nbsp;&nbsp;
-			socket&nbsp;&nbsp;
-			</div>
-		</div>
+      <div class="name-list">
+      base64&nbsp;&nbsp;
+      socket&nbsp;&nbsp;
+      </div>
+    </div>
+
+   </div>
 
 
+  </div>
 
 
+    <!-- if includes -->
 
-			
-		<div id="class-list">
-			<h2 class="section-bar">Classes and Modules</h2>
-
-			Class <a href="../classes/ManageSieve.html" class="link">ManageSieve</a><br />
-Class <a href="../classes/SieveAuthError.html" class="link">SieveAuthError</a><br />
-Class <a href="../classes/SieveCommandError.html" class="link">SieveCommandError</a><br />
-Class <a href="../classes/SieveResponseError.html" class="link">SieveResponseError</a><br />
-
-		</div>
-
-	</div>
+    <div id="section">
 
 
 
-		<!-- if includes -->
 
 
-		<!-- if method_list -->
+      
 
 
-	</div>
+    <!-- if method_list -->
+
+
+  </div>
 
 
 <div id="validator-badges">
