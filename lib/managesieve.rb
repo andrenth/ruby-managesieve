@@ -25,12 +25,23 @@
 # See the ManageSieve class for documentation and examples.
 #
 #--
-# $Id: managesieve.rb,v 1.4 2004/12/27 20:21:07 andre Exp $
+# $Id: managesieve.rb,v 1.5 2004/12/28 19:38:36 andre Exp $
 #++
 #
 
 require 'base64'
 require 'socket'
+
+#
+# Define our own Base64.encode64 for compatibility with ruby <= 1.8.1, which
+# defines encode64() at the top level.
+#
+module Base64
+  def encode64(s)
+    [s].pack('m')
+  end
+  module_function :encode64
+end
 
 class SieveAuthError < Exception; end
 class SieveCommandError < Exception; end
@@ -206,15 +217,15 @@ class ManageSieve
   def auth_plain(euser, user, pass) # :nodoc:
     args = [ euser, user, pass ]
     params = sieve_name('PLAIN') + ' '
-    params += sieve_name(encode64(args.join(0.chr)).gsub(/\n/, ''))
+    params += sieve_name(Base64.encode64(args.join(0.chr)).gsub(/\n/, ''))
     send_command('AUTHENTICATE', params)
   end
 
   private
   def auth_login(user, pass) # :nodoc:
     send_command('AUTHENTICATE', sieve_name('LOGIN'), false)
-    send_command(sieve_name(encode64(user)).gsub(/\n/, ''), nil, false)
-    send_command(sieve_name(encode64(pass)).gsub(/\n/, ''))
+    send_command(sieve_name(Base64.encode64(user)).gsub(/\n/, ''), nil, false)
+    send_command(sieve_name(Base64.encode64(pass)).gsub(/\n/, ''))
   end
 
   private
