@@ -25,7 +25,7 @@
 # See the ManageSieve class for documentation and examples.
 #
 #--
-# $Id: managesieve.rb,v 1.6 2004/12/29 13:25:10 andre Exp $
+# $Id: managesieve.rb,v 1.7 2004/12/29 13:46:10 andre Exp $
 #++
 #
 
@@ -143,7 +143,7 @@ class ManageSieve
     begin
       scripts = send_command('LISTSCRIPTS')
     rescue SieveCommandError => e
-      raise e, "Cannot list scripts"
+      raise e, "Cannot list scripts: #{e}"
     end
     scripts.each { |name, status| yield(name, status) }
   end
@@ -301,7 +301,7 @@ class ManageSieve
       when :ok
         return response
       when :error
-        raise SieveResponseError, data
+        raise SieveResponseError, data.strip.gsub(/\r\n/, ' ')
       else
         response << data
       end
