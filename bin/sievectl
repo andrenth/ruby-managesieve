@@ -75,17 +75,28 @@
 #        sievectl del scriptname
 #
 #--
-# $Id: sievectl,v 1.17 2005/02/02 16:32:47 andre Exp $
+# $Id: sievectl,v 1.18 2005/03/24 19:16:03 andre Exp $
 #++
 #
 
 begin
   require 'rubygems'
+  require_gem 'managesieve'
 rescue LoadError
-  nil
+  require 'managesieve'
 end
 
-require 'managesieve'
+$has_termios = true
+begin
+  require_gem 'termios'
+rescue LoadError
+  begin
+    require 'termios'
+  rescue LoadError
+    $has_termios = false
+  end
+end
+
 require 'yaml'
 
 class ManageSieve # :nodoc:
@@ -282,6 +293,23 @@ unless conf.has_key? account
 end
 
 info = conf[account]
+
+if $has_termios and info['password'].nil?
+  oldt = Termios.tcgetattr(STDIN)
+  newt = oldt.dup
+  newt.lflag &= ~Termios::ECHO
+  Termios.tcsetattr(STDIN, Termios::TCSANOW, newt)
+  print 'Password: '
+  info['password'] = STDIN.gets
+  Termios.tcsetattr(STDIN, Termios::TCSANOW, oldt)
+end
+
+if info['password'].nil?
+  STDERR.puts "* Password not given."
+  exit 1
+end
+
+info['password'].chomp!
 
 sievectl = SieveCtl.new(
   :host     => info['host'],
