@@ -75,7 +75,7 @@
 #        sievectl del scriptname
 #
 #--
-# $Id: sievectl,v 1.19 2005/11/18 16:11:09 andre Exp $
+# $Id: sievectl,v 1.20 2005/12/27 17:20:03 andre Exp $
 #++
 #
 
@@ -312,12 +312,12 @@ end
 info['password'].chomp!
 
 sievectl = SieveCtl.new(
-  :host     => info['host'],
-  :port     => info['port'],
-  :user     => info['user'],
-  :euser    => info['euser'],
+  :host     => info['host'].to_s,
+  :port     => info['port'].to_s,
+  :user     => info['user'].to_s,
+  :euser    => info['euser'].to_s,
   :password => info['password'].to_s,
-  :auth     => info['auth']
+  :auth     => info['auth'].to_s
 )
 
 begin
