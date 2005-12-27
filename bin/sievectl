@@ -75,7 +75,7 @@
 #        sievectl myaccount del scriptname
 #
 #--
-# $Id: sievectl,v 1.21 2005/12/27 17:26:53 andre Exp $
+# $Id: sievectl,v 1.22 2005/12/27 17:48:35 andre Exp $
 #++
 #
 
@@ -220,9 +220,9 @@ class SieveCtl
   end
 end
 
-def usage(quit=true) # :nodoc: #
+def usage(quit=true, out=STDERR) # :nodoc: #
   prog = File.basename $0
-  STDERR.puts <<-__EOF__
+  out.puts <<-__EOF__
 Usage: #{prog} <account> <action> [script name]
 Action is one of:
   capabilities, list, show, activate, deactivate, add, addactive, delete
@@ -234,7 +234,7 @@ end
 
 def help # :nodoc:
   prog = File::basename $0
-  usage(false)
+  usage(false, STDOUT)
   puts <<-__EOF__
 
 Short forms for some actions are also accepted:
