@@ -51,31 +51,31 @@
 #    capabilities, list, show, activate, deactivate, add, addactive, delete
 #  
 #  Short forms for some actions are also accepted:
-#    caps (capabilities), act (activate), deact (deactivate), addact (addactive),
-#    del (delete)
+#    caps (capabilities), act (activate), deact (deactivate),
+#    addact (addactive), del (delete)
 #  
 #    Examples:
 #      List server capabilities:
-#        sievectl caps
+#        sievectl myaccount caps
 #  
 #      List available scripts:
-#        sievectl list
+#        sievectl myaccount list
 #  
 #      Show contents of a script:
-#        sievectl show scriptname
+#        sievectl myaccount show scriptname
 #  
 #      Add a script:
-#        sievectl add scriptname script.txt
+#        sievectl myaccount add scriptname script.txt
 #        or
-#        sievectl add scriptname < script.txt
+#        sievectl myaccount add scriptname < script.txt
 #        or
-#        cat script.txt | sievectl add scriptname
+#        cat script.txt | sievectl myaccount add scriptname
 #  
 #      Delete a script:
-#        sievectl del scriptname
+#        sievectl myaccount del scriptname
 #
 #--
-# $Id: sievectl,v 1.20 2005/12/27 17:20:03 andre Exp $
+# $Id: sievectl,v 1.21 2005/12/27 17:26:53 andre Exp $
 #++
 #
 
@@ -221,7 +221,7 @@ class SieveCtl
 end
 
 def usage(quit=true) # :nodoc: #
-  prog = File::basename $0
+  prog = File.basename $0
   STDERR.puts <<-__EOF__
 Usage: #{prog} <account> <action> [script name]
 Action is one of:
@@ -243,23 +243,23 @@ Short forms for some actions are also accepted:
 
 Examples:
   List server capabilities:
-    #{prog} caps
+    #{prog} myaccount caps
 
   List available scripts:
-    #{prog} list
+    #{prog} myaccount list
 
   Show contents of a script:
-    #{prog} show scriptname
+    #{prog} myaccount show scriptname
 
   Add a script:
-    #{prog} add scriptname script.txt
+    #{prog} myaccount add scriptname script.txt
     or
-    #{prog} add scriptname < script.txt
+    #{prog} myaccount add scriptname < script.txt
     or
-    cat script.txt | #{prog} add scriptname
+    cat script.txt | #{prog} myaccount add scriptname
 
   Delete a script:
-    #{prog} del scriptname
+    #{prog} myaccount del scriptname
   __EOF__
   exit 0
 end
