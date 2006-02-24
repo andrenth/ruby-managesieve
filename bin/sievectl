@@ -75,7 +75,7 @@
 #        sievectl myaccount del scriptname
 #
 #--
-# $Id: sievectl,v 1.22 2005/12/27 17:48:35 andre Exp $
+# $Id: sievectl,v 1.23 2006/02/24 17:02:48 andre Exp $
 #++
 #
 
@@ -128,10 +128,14 @@ end
 class ConfigFile < File # :nodoc:
   def ConfigFile.open(name)
     begin
-      file = super(name)
-      conf = YAML::load(file)
-      file.close
-      return conf
+      conf = nil
+      super(name) do |file|
+        conf = YAML::load(file)
+      end
+      conf.each_key do |acct|
+        conf[acct].each_key { |k| conf[acct][k] = conf[acct][k].to_s }
+      end
+      conf
     rescue Errno::ENOENT
       ConfigFile::create_template(name)
       exit 0
@@ -312,12 +316,12 @@ end
 info['password'].chomp!
 
 sievectl = SieveCtl.new(
-  :host     => info['host'].to_s,
-  :port     => info['port'].to_s,
-  :user     => info['user'].to_s,
-  :euser    => info['euser'].to_s,
-  :password => info['password'].to_s,
-  :auth     => info['auth'].to_s
+  :host     => info['host'],
+  :port     => info['port'] || 2000,
+  :user     => info['user'],
+  :euser    => info['euser'] || info['user'],
+  :password => info['password'],
+  :auth     => info['auth']
 )
 
 begin
