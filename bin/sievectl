@@ -75,16 +75,15 @@
 #        sievectl myaccount del scriptname
 #
 #--
-# $Id: sievectl,v 1.23 2006/02/24 17:02:48 andre Exp $
+# $Id: sievectl,v 1.24 2006/05/05 17:25:57 andre Exp $
 #++
 #
 
 begin
   require 'rubygems'
-  require_gem 'managesieve'
 rescue LoadError
-  require 'managesieve'
 end
+require 'managesieve'
 
 $has_termios = true
 begin
