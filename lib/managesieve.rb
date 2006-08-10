@@ -25,7 +25,7 @@
 # See the ManageSieve class for documentation and examples.
 #
 #--
-# $Id: managesieve.rb,v 1.10 2005/01/17 11:25:56 andre Exp $
+# $Id: managesieve.rb,v 1.11 2006/08/10 00:13:26 andre Exp $
 #++
 #
 
@@ -270,7 +270,7 @@ class ManageSieve
       data = get_line
 
       # server ok
-      m = /^OK$/.match(data)
+      m = /^OK(.*)?$/.match(data)
       yield :ok, m.captures.values_at(0, 3) and next if m
 
       # server error
