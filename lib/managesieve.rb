@@ -25,7 +25,7 @@
 # See the ManageSieve class for documentation and examples.
 #
 #--
-# $Id: managesieve.rb,v 1.11 2006/08/10 00:13:26 andre Exp $
+# $Id: managesieve.rb,v 1.12 2006/08/10 00:28:14 andre Exp $
 #++
 #
 
