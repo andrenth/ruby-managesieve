@@ -55,7 +55,7 @@
         <tr class="top-aligned-row">
             <td><strong>In:</strong></td>
             <td>
-                <a href="../files/sievectl.html">
+                <a href="../files/sievectl_rb.html">
                 sievectl
                 </a>
         <br />
@@ -136,10 +136,10 @@ methods around the ones available on the ManageSieve class.
             onclick="toggleCode('M000001-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000001-source">
 <pre>
-<span class="ruby-comment cmt"># File sievectl, line 158</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">conf</span>)
-    <span class="ruby-ivar">@manage_sieve</span> = <span class="ruby-constant">ManageSieve</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">conf</span>)
-  <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File sievectl, line 176</span>
+176:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">conf</span>)
+177:     <span class="ruby-ivar">@manage_sieve</span> = <span class="ruby-constant">ManageSieve</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">conf</span>)
+178:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -164,11 +164,11 @@ Activates <tt>script</tt>.
             onclick="toggleCode('M000005-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000005-source">
 <pre>
-<span class="ruby-comment cmt"># File sievectl, line 179</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">activate</span>(<span class="ruby-identifier">script</span>)
-    <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;`activate' requires a script name&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">script</span>
-    <span class="ruby-ivar">@manage_sieve</span>.<span class="ruby-identifier">set_active</span>(<span class="ruby-identifier">script</span>)
-  <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File sievectl, line 197</span>
+197:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">activate</span>(<span class="ruby-identifier">script</span>)
+198:     <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;`activate' requires a script name&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">script</span>
+199:     <span class="ruby-ivar">@manage_sieve</span>.<span class="ruby-identifier">set_active</span>(<span class="ruby-identifier">script</span>)
+200:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -193,14 +193,14 @@ Activates the script is <tt>active</tt> is true.
             onclick="toggleCode('M000007-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000007-source">
 <pre>
-<span class="ruby-comment cmt"># File sievectl, line 195</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add</span>(<span class="ruby-identifier">script</span>, <span class="ruby-identifier">file</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">active</span>=<span class="ruby-keyword kw">false</span>)
-    <span class="ruby-identifier">action</span> = <span class="ruby-node">&quot;add#{active ? 'active' : ''}&quot;</span>
-    <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-node">&quot;`#{action}' requires a script name&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">script</span>
-    <span class="ruby-identifier">data</span> = <span class="ruby-identifier">file</span> <span class="ruby-value">? </span><span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">file</span>).<span class="ruby-identifier">readlines</span> <span class="ruby-operator">:</span> <span class="ruby-constant">STDIN</span>.<span class="ruby-identifier">readlines</span>
-    <span class="ruby-ivar">@manage_sieve</span>.<span class="ruby-identifier">put_script</span>(<span class="ruby-identifier">script</span>, <span class="ruby-identifier">data</span>.<span class="ruby-identifier">to_s</span>)
-    <span class="ruby-identifier">activate</span> <span class="ruby-identifier">script</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">active</span>
-  <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File sievectl, line 213</span>
+213:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add</span>(<span class="ruby-identifier">script</span>, <span class="ruby-identifier">file</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">active</span>=<span class="ruby-keyword kw">false</span>)
+214:     <span class="ruby-identifier">action</span> = <span class="ruby-node">&quot;add#{active ? 'active' : ''}&quot;</span>
+215:     <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-node">&quot;`#{action}' requires a script name&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">script</span>
+216:     <span class="ruby-identifier">data</span> = <span class="ruby-identifier">file</span> <span class="ruby-value">? </span><span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">file</span>).<span class="ruby-identifier">readlines</span> <span class="ruby-operator">:</span> <span class="ruby-constant">STDIN</span>.<span class="ruby-identifier">readlines</span>
+217:     <span class="ruby-ivar">@manage_sieve</span>.<span class="ruby-identifier">put_script</span>(<span class="ruby-identifier">script</span>, <span class="ruby-identifier">data</span>.<span class="ruby-identifier">to_s</span>)
+218:     <span class="ruby-identifier">activate</span> <span class="ruby-identifier">script</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">active</span>
+219:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -223,10 +223,10 @@ Prints the server capabilities.
             onclick="toggleCode('M000002-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000002-source">
 <pre>
-<span class="ruby-comment cmt"># File sievectl, line 163</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">capabilities</span>
-    <span class="ruby-ivar">@manage_sieve</span>.<span class="ruby-identifier">print_capabilities</span>
-  <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File sievectl, line 181</span>
+181:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">capabilities</span>
+182:     <span class="ruby-ivar">@manage_sieve</span>.<span class="ruby-identifier">print_capabilities</span>
+183:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -250,13 +250,13 @@ MANAGESIEVE draft, so we fetch the script, remove it and upload it again.
             onclick="toggleCode('M000006-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000006-source">
 <pre>
-<span class="ruby-comment cmt"># File sievectl, line 186</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">deactivate</span>(<span class="ruby-identifier">script</span>)
-    <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;`deactivate' requires a script name&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">script</span>
-    <span class="ruby-identifier">data</span> = <span class="ruby-ivar">@manage_sieve</span>.<span class="ruby-identifier">get_script</span>(<span class="ruby-identifier">script</span>)
-    <span class="ruby-ivar">@manage_sieve</span>.<span class="ruby-identifier">delete_script</span>(<span class="ruby-identifier">script</span>)
-    <span class="ruby-ivar">@manage_sieve</span>.<span class="ruby-identifier">put_script</span>(<span class="ruby-identifier">script</span>, <span class="ruby-identifier">data</span>)
-  <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File sievectl, line 204</span>
+204:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">deactivate</span>(<span class="ruby-identifier">script</span>)
+205:     <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;`deactivate' requires a script name&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">script</span>
+206:     <span class="ruby-identifier">data</span> = <span class="ruby-ivar">@manage_sieve</span>.<span class="ruby-identifier">get_script</span>(<span class="ruby-identifier">script</span>)
+207:     <span class="ruby-ivar">@manage_sieve</span>.<span class="ruby-identifier">delete_script</span>(<span class="ruby-identifier">script</span>)
+208:     <span class="ruby-ivar">@manage_sieve</span>.<span class="ruby-identifier">put_script</span>(<span class="ruby-identifier">script</span>, <span class="ruby-identifier">data</span>)
+209:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -279,11 +279,11 @@ Deletes <tt>script</tt>
             onclick="toggleCode('M000008-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000008-source">
 <pre>
-<span class="ruby-comment cmt"># File sievectl, line 204</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete</span>(<span class="ruby-identifier">script</span>)
-    <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;`activate' requires a script name&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">script</span>
-    <span class="ruby-ivar">@manage_sieve</span>.<span class="ruby-identifier">delete_script</span>(<span class="ruby-identifier">script</span>)
-  <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File sievectl, line 222</span>
+222:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete</span>(<span class="ruby-identifier">script</span>)
+223:     <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;`activate' requires a script name&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">script</span>
+224:     <span class="ruby-ivar">@manage_sieve</span>.<span class="ruby-identifier">delete_script</span>(<span class="ruby-identifier">script</span>)
+225:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -306,10 +306,10 @@ Lists the available scripts, specifying which one is active.
             onclick="toggleCode('M000003-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000003-source">
 <pre>
-<span class="ruby-comment cmt"># File sievectl, line 168</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">list</span>
-    <span class="ruby-ivar">@manage_sieve</span>.<span class="ruby-identifier">print_scripts</span>
-  <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File sievectl, line 186</span>
+186:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">list</span>
+187:     <span class="ruby-ivar">@manage_sieve</span>.<span class="ruby-identifier">print_scripts</span>
+188:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -332,11 +332,11 @@ Shows the contents of <tt>script</tt>.
             onclick="toggleCode('M000004-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000004-source">
 <pre>
-<span class="ruby-comment cmt"># File sievectl, line 173</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">show</span>(<span class="ruby-identifier">script</span>)
-    <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;`show' requires a script name&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">script</span>
-    <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@manage_sieve</span>.<span class="ruby-identifier">get_script</span>(<span class="ruby-identifier">script</span>)
-  <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File sievectl, line 191</span>
+191:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">show</span>(<span class="ruby-identifier">script</span>)
+192:     <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;`show' requires a script name&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">script</span>
+193:     <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@manage_sieve</span>.<span class="ruby-identifier">get_script</span>(<span class="ruby-identifier">script</span>)
+194:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

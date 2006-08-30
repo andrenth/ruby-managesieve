@@ -5,7 +5,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>File: managesieve.rb</title>
+  <title>File: sievectl</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <meta http-equiv="Content-Script-Type" content="text/javascript" />
   <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
@@ -47,16 +47,16 @@
 
 
   <div id="fileHeader">
-    <h1>managesieve.rb</h1>
+    <h1>sievectl</h1>
     <table class="header-table">
     <tr class="top-aligned-row">
       <td><strong>Path:</strong></td>
-      <td>managesieve.rb
+      <td>sievectl
       </td>
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Wed Aug 30 11:23:58 BRT 2006</td>
+      <td>Wed Aug 30 14:08:50 BRT 2006</td>
     </tr>
     </table>
   </div>
@@ -69,16 +69,66 @@
   <div id="contextContent">
 
     <div id="description">
-      <h2>Overview</h2>
+      <h1>Overview</h1>
 <p>
-This library is a pure-ruby implementation of the MANAGESIEVE protocol, as
-specified in its <a
-href="http://managesieve.rubyforge.org/draft-martin-managesieve-04.txt">Draft</a>.
+Sievectl is a utility that allows for management of <a
+href="http://www.cyrusoft.com/sieve/">Sieve</a> scripts from the command
+line. It supports multiple accounts, configured in the .sievectlrc file
+located in the user&#8217;s home directory.
 </p>
+<h2>Configuration file example</h2>
+<pre>
+ accountA:
+   host:     sieve.accounta.tld
+   port:     2000
+   user:     johndoe
+   euser:    johndoe
+   password: secret
+   auth:     PLAIN
+
+ accountB:
+   host:     mail.accountb.tld
+   user:     john
+   password: secret
+   auth:     PLAIN
+</pre>
 <p>
-See the <a href="../classes/ManageSieve.html">ManageSieve</a> class for
-documentation and examples.
+The <tt>port</tt> and <tt>euser</tt> parameters can be ommited, and will
+respectively default to 2000 and the value of the <tt>user</tt> parameter.
+If the <tt>auth</tt> parameter is ommited, it will default to
+<tt>ANONYMOUS</tt>.
 </p>
+<h2>Usage and examples</h2>
+<pre>
+ $ sievectl help
+ Usage: sievectl &lt;account&gt; &lt;action&gt; [script name]
+ Action is one of:
+   capabilities, list, show, activate, deactivate, add, addactive, delete
+
+ Short forms for some actions are also accepted:
+   caps (capabilities), act (activate), deact (deactivate),
+   addact (addactive), del (delete)
+
+   Examples:
+     List server capabilities:
+       sievectl myaccount caps
+
+     List available scripts:
+       sievectl myaccount list
+
+     Show contents of a script:
+       sievectl myaccount show scriptname
+
+     Add a script:
+       sievectl myaccount add scriptname script.txt
+       or
+       sievectl myaccount add scriptname &lt; script.txt
+       or
+       cat script.txt | sievectl myaccount add scriptname
+
+     Delete a script:
+       sievectl myaccount del scriptname
+</pre>
 
     </div>
 
@@ -86,8 +136,10 @@ documentation and examples.
       <h3 class="section-bar">Required files</h3>
 
       <div class="name-list">
-      base64&nbsp;&nbsp;
-      socket&nbsp;&nbsp;
+      rubygems&nbsp;&nbsp;
+      managesieve&nbsp;&nbsp;
+      termios&nbsp;&nbsp;
+      yaml&nbsp;&nbsp;
       </div>
     </div>
 
