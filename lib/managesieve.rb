@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 #
 #--
-# Copyright (c) 2004, 2005 Andre Nathan <andre@digirati.com.br>
+# Copyright (c) 2004-2006 Andre Nathan <andre@digirati.com.br>
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -25,7 +25,7 @@
 # See the ManageSieve class for documentation and examples.
 #
 #--
-# $Id: managesieve.rb,v 1.12 2006/08/10 00:28:14 andre Exp $
+# $Id: managesieve.rb,v 1.13 2006/08/30 14:23:58 andre Exp $
 #++
 #
 
@@ -45,6 +45,7 @@ end
 
 class SieveAuthError < Exception; end
 class SieveCommandError < Exception; end
+class SieveNetworkError < Exception; end
 class SieveResponseError < Exception; end
 
 #
@@ -249,7 +250,11 @@ class ManageSieve
 
   private
   def get_line # :nodoc:
-    return @socket.readline.chomp
+    begin
+      return @socket.readline.chomp
+    rescue EOFError => e
+      raise SieveNetworkError, "Network error: #{e}"
+    end
   end
 
   private
