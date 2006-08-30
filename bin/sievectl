@@ -75,7 +75,7 @@
 #        sievectl myaccount del scriptname
 #
 #--
-# $Id: sievectl,v 1.26 2006/08/30 17:42:30 andre Exp $
+# $Id: sievectl,v 1.27 2006/08/30 18:06:21 andre Exp $
 #++
 #
 
@@ -211,8 +211,12 @@ class SieveCtl
   def add(script, file=nil, active=false)
     action = "add#{active ? 'active' : ''}"
     raise ArgumentError, "`#{action}' requires a script name" unless script
-    data = file ? File.open(file).readlines : STDIN.readlines
-    @manage_sieve.put_script(script, data.to_s)
+    data = file ? File.open(file).readlines.to_s : STDIN.readlines.to_s
+    unless @manage_sieve.have_space?(script, data.length)
+      raise SieveCommandError, "not enough space for script `#{script}' " +
+                               "(#{data.length} bytes)"
+    end
+    @manage_sieve.put_script(script, data)
     activate script if active
   end
 
@@ -349,6 +353,6 @@ begin
   else
     usage
   end
-rescue SieveCommandError => e
-  STDERR.puts "* #{e}"
+rescue ArgumentError, SieveCommandError => e
+  STDERR.puts "* sievectl: #{e}"
 end
