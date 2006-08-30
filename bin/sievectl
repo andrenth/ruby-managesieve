@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 #
 #--
-# Copyright (c) 2004, 2005 Andre Nathan <andre@digirati.com.br>
+# Copyright (c) 2004-2006 Andre Nathan <andre@digirati.com.br>
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -75,7 +75,7 @@
 #        sievectl myaccount del scriptname
 #
 #--
-# $Id: sievectl,v 1.25 2006/08/30 14:23:57 andre Exp $
+# $Id: sievectl,v 1.26 2006/08/30 17:42:30 andre Exp $
 #++
 #
 
