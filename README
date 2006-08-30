@@ -40,7 +40,7 @@ PHP implementation from the PEAR library.
 1. REQUIREMENTS
 ===============
 
-Ruby/ManageSieve requires Ruby version 1.8.1.
+Ruby/ManageSieve requires Ruby version 1.8.1 or newer.
 
 
 2. INSTALLATION
@@ -81,7 +81,7 @@ To learn how to use sievectl, type "sievectl help".
 3. LICENSE
 ==========
 
-Copyright (c) 2004, 2005 Andre Nathan <andre@digirati.com.br>
+Copyright (c) 2004-2006 Andre Nathan <andre@digirati.com.br>
 
 Permission to use, copy, modify, and distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
@@ -109,7 +109,7 @@ Ruby/ManageSieve was developed by Andre Nathan.
     http://managesieve.rubyforge.org/draft-martin-managesieve-04.txt
 
 [2] The Sieve email filtering language
-    http://www.cyrusoft.com/sieve
+    http://sieve.info/
 
 [3] Python-managesieve:
     http://www.crazy-compilers.com/py-lib/managesieve.html
