@@ -75,7 +75,7 @@
 #        sievectl myaccount del scriptname
 #
 #--
-# $Id: sievectl,v 1.27 2006/08/30 18:06:21 andre Exp $
+# $Id: sievectl,v 1.28 2006/11/17 11:19:42 andre Exp $
 #++
 #
 
@@ -87,13 +87,9 @@ require 'managesieve'
 
 $has_termios = true
 begin
-  require_gem 'termios'
+  require 'termios'
 rescue LoadError
-  begin
-    require 'termios'
-  rescue LoadError
-    $has_termios = false
-  end
+  $has_termios = false
 end
 
 require 'yaml'
