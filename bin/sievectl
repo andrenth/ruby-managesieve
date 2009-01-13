@@ -78,7 +78,7 @@
 #        sievectl myaccount del scriptname
 #
 #--
-# $Id: sievectl,v 1.29 2009/01/13 20:56:13 andre Exp $
+# $Id: sievectl,v 1.30 2009/01/13 21:29:52 andre Exp $
 #++
 #
 
@@ -128,14 +128,14 @@ class ConfigFile < File # :nodoc:
     begin
       conf = nil
       super(name) do |file|
-        conf = YAML::load(file)
+        conf = YAML.load(file)
       end
       conf.each_key do |acct|
-        conf[acct].each_key { |k| conf[acct][k] = conf[acct][k].to_s }
+        conf[acct].each_key { |k| conf[acct][k] = conf[acct][k] }
       end
       conf
     rescue Errno::ENOENT
-      ConfigFile::create_template(name)
+      ConfigFile.create_template(name)
       exit 0
     end
   end
@@ -145,7 +145,7 @@ class ConfigFile < File # :nodoc:
     STDERR.puts <<-__EOF__
 * Could not find configuration file #{name}.
 * A template file will be created. Please edit the values to fit your
-* local configuration and run `#{File::basename $0}' again.
+* local configuration and run `#{File.basename($0)}' again.
     __EOF__
 
     begin
@@ -228,7 +228,7 @@ class SieveCtl
 end
 
 def usage(quit=true, out=STDERR) # :nodoc: #
-  prog = File.basename $0
+  prog = File.basename($0)
   out.puts <<-__EOF__
 Usage: #{prog} <account> <action> [script name]
 Action is one of:
@@ -240,7 +240,7 @@ You can also try `#{prog} help' for usage examples.
 end
 
 def help # :nodoc:
-  prog = File::basename $0
+  prog = File.basename($0)
   usage(false, STDOUT)
   puts <<-__EOF__
 
@@ -282,7 +282,7 @@ account, action, name, file = ARGV
 usage if action.nil?
 
 begin
-  conf = ConfigFile::open(ENV['HOME'] + '/.sievectlrc')
+  conf = ConfigFile.open(ENV['HOME'] + '/.sievectlrc')
 rescue TemplateError => e
   STDERR.puts "Cannot create template configuration file: #{e}"
   exit 1
@@ -319,14 +319,16 @@ end
 info['password'].chomp!
 
 begin
-  sievectl = SieveCtl.new(
+  config = {
     :host     => info['host'],
     :port     => info['port'] || 2000,
-    :user     => info['user'],
-    :euser    => info['euser'] || info['user'],
-    :password => info['password'],
+    :user     => info['user'].to_s,
+    :euser    => info['euser'].to_s || info['user'].to_s,
+    :password => info['password'].to_s,
     :auth     => info['auth']
-  )
+  }
+  config.merge!({:tls => info['tls']}) if info.has_key? 'tls'
+  sievectl = SieveCtl.new(config)
 rescue SieveNetworkError => e
   STDERR.puts "* #{e}"
   exit 1
