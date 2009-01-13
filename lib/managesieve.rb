@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 #
 #--
-# Copyright (c) 2004-2006 Andre Nathan <andre@digirati.com.br>
+# Copyright (c) 2004-2009 Andre Nathan <andre@digirati.com.br>
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -25,12 +25,17 @@
 # See the ManageSieve class for documentation and examples.
 #
 #--
-# $Id: managesieve.rb,v 1.13 2006/08/30 14:23:58 andre Exp $
+# $Id: managesieve.rb,v 1.14 2009/01/13 19:22:08 andre Exp $
 #++
 #
 
 require 'base64'
 require 'socket'
+
+begin
+  require 'openssl'
+rescue LoadError
+end
 
 #
 # Define our own Base64.encode64 for compatibility with ruby <= 1.8.1, which
@@ -104,7 +109,7 @@ class SieveResponseError < Exception; end
 class ManageSieve
   SIEVE_PORT = 2000
 
-  attr_reader :host, :port, :user, :euser, :capabilities, :login_mechs
+  attr_reader :host, :port, :user, :euser, :capabilities, :login_mechs, :tls
 
   # Create a new ManageSieve instance. The +info+ parameter is a hash with the
   # following keys:
@@ -115,6 +120,7 @@ class ManageSieve
   # [<i>:euser</i>]     the name of the effective user (defaults to +:user+)
   # [<i>:password</i>]  the password of the user
   # [<i>:auth_mech</i>] the authentication mechanism (defaults to +"ANONYMOUS"+)
+  # [<i>:tls</i>]       use TLS (defaults to use it if the server supports it)
   #
   def initialize(info)
     @host      = info[:host]
@@ -123,15 +129,25 @@ class ManageSieve
     @euser     = info[:euser] || @user
     @password  = info[:password]
     @auth_mech = info[:auth] || 'ANONYMOUS'
+    @tls       = info.has_key?(:tls) ? !!info[:tls] : nil
 
     @capabilities   = []
     @login_mechs    = []
     @implementation = ''
     @supports_tls   = false
-    @socket = TCPSocket.new(@host, @port)
+    @socket         = TCPSocket.new(@host, @port)
 
     data = get_response
     server_features(data)
+
+    if @tls and not supports_tls?
+      raise SieveNetworkError, 'Server does not support TLS'
+      @socket.close
+    elsif @tls != false
+      @tls = supports_tls?
+      starttls if @tls
+    end
+
     authenticate
     @password = nil
   end
@@ -261,7 +277,7 @@ class ManageSieve
   def send_command(cmd, args=nil, wait_response=true) # :nodoc:
     cmd += ' ' + args if args
     begin
-      @socket.send(cmd + "\r\n", 0)
+      @socket.write(cmd + "\r\n")
       resp = get_response if wait_response
     rescue SieveResponseError => e
       raise SieveCommandError, "Command error: #{e}"
@@ -326,4 +342,13 @@ class ManageSieve
     return "{#{string.length}+}\r\n#{string}"
   end
 
+  private
+  def starttls
+    send_command('STARTTLS')
+    @socket = OpenSSL::SSL::SSLSocket.new(@socket)
+    @socket.sync_close = true
+    @socket.connect
+    data = get_response
+    server_features(data)
+  end
 end
