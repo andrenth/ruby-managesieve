@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 #
 #--
-# Copyright (c) 2004-2006 Andre Nathan <andre@digirati.com.br>
+# Copyright (c) 2004-2009 Andre Nathan <andre@digirati.com.br>
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -38,10 +38,13 @@
 #    user:     john
 #    password: secret
 #    auth:     PLAIN
+#    tls:      false
 #
 # The +port+ and +euser+ parameters can be ommited, and will respectively
 # default to 2000 and the value of the +user+ parameter. If the +auth+
-# parameter is ommited, it will default to +ANONYMOUS+.
+# parameter is ommited, it will default to +ANONYMOUS+. If the +tls+ parameter
+# is ommited, a TLS connection will be used if the server supports it.
+# Otherwise, a plain text connection will be used.
 #
 # == Usage and examples
 #
@@ -75,7 +78,7 @@
 #        sievectl myaccount del scriptname
 #
 #--
-# $Id: sievectl,v 1.28 2006/11/17 11:19:42 andre Exp $
+# $Id: sievectl,v 1.29 2009/01/13 20:56:13 andre Exp $
 #++
 #
 
@@ -155,6 +158,7 @@ accountname:
   euser:    effectiveusername
   password: password
   auth:     authmethod
+  tls:      true
       __EOF__
     rescue => e
       raise TemplateError, e
