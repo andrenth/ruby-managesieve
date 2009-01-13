@@ -8,7 +8,7 @@
   <title>Class: SieveCtl</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <meta http-equiv="Content-Script-Type" content="text/javascript" />
-  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="/rdoc-style.css" type="text/css" media="screen" />
   <script type="text/javascript">
   // <![CDATA[
 
@@ -55,7 +55,7 @@
         <tr class="top-aligned-row">
             <td><strong>In:</strong></td>
             <td>
-                <a href="../files/sievectl_rb.html">
+                <a href="../files/sievectl.html">
                 sievectl
                 </a>
         <br />
@@ -197,10 +197,14 @@ Activates the script is <tt>active</tt> is true.
 213:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add</span>(<span class="ruby-identifier">script</span>, <span class="ruby-identifier">file</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">active</span>=<span class="ruby-keyword kw">false</span>)
 214:     <span class="ruby-identifier">action</span> = <span class="ruby-node">&quot;add#{active ? 'active' : ''}&quot;</span>
 215:     <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-node">&quot;`#{action}' requires a script name&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">script</span>
-216:     <span class="ruby-identifier">data</span> = <span class="ruby-identifier">file</span> <span class="ruby-value">? </span><span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">file</span>).<span class="ruby-identifier">readlines</span> <span class="ruby-operator">:</span> <span class="ruby-constant">STDIN</span>.<span class="ruby-identifier">readlines</span>
-217:     <span class="ruby-ivar">@manage_sieve</span>.<span class="ruby-identifier">put_script</span>(<span class="ruby-identifier">script</span>, <span class="ruby-identifier">data</span>.<span class="ruby-identifier">to_s</span>)
-218:     <span class="ruby-identifier">activate</span> <span class="ruby-identifier">script</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">active</span>
-219:   <span class="ruby-keyword kw">end</span>
+216:     <span class="ruby-identifier">data</span> = <span class="ruby-identifier">file</span> <span class="ruby-value">? </span><span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">file</span>).<span class="ruby-identifier">readlines</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">:</span> <span class="ruby-constant">STDIN</span>.<span class="ruby-identifier">readlines</span>.<span class="ruby-identifier">to_s</span>
+217:     <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@manage_sieve</span>.<span class="ruby-identifier">have_space?</span>(<span class="ruby-identifier">script</span>, <span class="ruby-identifier">data</span>.<span class="ruby-identifier">length</span>)
+218:       <span class="ruby-identifier">raise</span> <span class="ruby-constant">SieveCommandError</span>, <span class="ruby-node">&quot;not enough space for script `#{script}' &quot;</span> <span class="ruby-operator">+</span>
+219:                                <span class="ruby-node">&quot;(#{data.length} bytes)&quot;</span>
+220:     <span class="ruby-keyword kw">end</span>
+221:     <span class="ruby-ivar">@manage_sieve</span>.<span class="ruby-identifier">put_script</span>(<span class="ruby-identifier">script</span>, <span class="ruby-identifier">data</span>)
+222:     <span class="ruby-identifier">activate</span> <span class="ruby-identifier">script</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">active</span>
+223:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -217,7 +221,7 @@ Activates the script is <tt>active</tt> is true.
       
         <div class="method-description">
           <p>
-Prints the server capabilities.
+Prints the server <a href="SieveCtl.html#M000002">capabilities</a>.
 </p>
           <p><a class="source-toggle" href="#"
             onclick="toggleCode('M000002-source');return false;">[Source]</a></p>
@@ -279,11 +283,11 @@ Deletes <tt>script</tt>
             onclick="toggleCode('M000008-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000008-source">
 <pre>
-     <span class="ruby-comment cmt"># File sievectl, line 222</span>
-222:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete</span>(<span class="ruby-identifier">script</span>)
-223:     <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;`activate' requires a script name&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">script</span>
-224:     <span class="ruby-ivar">@manage_sieve</span>.<span class="ruby-identifier">delete_script</span>(<span class="ruby-identifier">script</span>)
-225:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File sievectl, line 226</span>
+226:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete</span>(<span class="ruby-identifier">script</span>)
+227:     <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;`activate' requires a script name&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">script</span>
+228:     <span class="ruby-ivar">@manage_sieve</span>.<span class="ruby-identifier">delete_script</span>(<span class="ruby-identifier">script</span>)
+229:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

@@ -8,7 +8,7 @@
   <title>Class: ManageSieve</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <meta http-equiv="Content-Script-Type" content="text/javascript" />
-  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="/rdoc-style.css" type="text/css" media="screen" />
   <script type="text/javascript">
   // <![CDATA[
 
@@ -82,7 +82,8 @@
       <p>
 <a href="ManageSieve.html">ManageSieve</a> implements MANAGESIEVE, a
 protocol for remote management of <a
-href="http://www.cyrusoft.com/sieve/">Sieve</a> scripts.
+href="http://www.cyrusoft.com/sieve/">Sieve</a> <a
+href="ManageSieve.html#M000002">scripts</a>.
 </p>
 <p>
 The following MANAGESIEVE commands are implemented:
@@ -232,6 +233,11 @@ implemented.
           <td class="context-item-desc"></td>
         </tr>
         <tr class="top-aligned-row context-row">
+          <td class="context-item-name">tls</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
           <td class="context-item-name">user</td>
           <td class="context-item-value">&nbsp;[R]&nbsp;</td>
           <td class="context-item-desc"></td>
@@ -257,8 +263,9 @@ implemented.
       
         <div class="method-description">
           <p>
-Create a new <a href="ManageSieve.html">ManageSieve</a> instance. The
-<tt>info</tt> parameter is a hash with the following keys:
+Create a <a href="ManageSieve.html#M000001">new</a> <a
+href="ManageSieve.html">ManageSieve</a> instance. The <tt>info</tt>
+parameter is a hash with the following keys:
 </p>
 <dl>
 <dt><em>:host</em></dt><dd>the sieve server
@@ -279,31 +286,44 @@ Create a new <a href="ManageSieve.html">ManageSieve</a> instance. The
 <dt><em>:auth_mech</em></dt><dd>the authentication mechanism (defaults to +&quot;ANONYMOUS&quot;+)
 
 </dd>
+<dt><em>:tls</em></dt><dd>use TLS (defaults to use it if the server supports it)
+
+</dd>
 </dl>
           <p><a class="source-toggle" href="#"
             onclick="toggleCode('M000001-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000001-source">
 <pre>
-     <span class="ruby-comment cmt"># File managesieve.rb, line 119</span>
-119:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">info</span>)
-120:     <span class="ruby-ivar">@host</span>      = <span class="ruby-identifier">info</span>[<span class="ruby-identifier">:host</span>]
-121:     <span class="ruby-ivar">@port</span>      = <span class="ruby-identifier">info</span>[<span class="ruby-identifier">:port</span>] <span class="ruby-operator">||</span> <span class="ruby-value">2000</span>
-122:     <span class="ruby-ivar">@user</span>      = <span class="ruby-identifier">info</span>[<span class="ruby-identifier">:user</span>]
-123:     <span class="ruby-ivar">@euser</span>     = <span class="ruby-identifier">info</span>[<span class="ruby-identifier">:euser</span>] <span class="ruby-operator">||</span> <span class="ruby-ivar">@user</span>
-124:     <span class="ruby-ivar">@password</span>  = <span class="ruby-identifier">info</span>[<span class="ruby-identifier">:password</span>]
-125:     <span class="ruby-ivar">@auth_mech</span> = <span class="ruby-identifier">info</span>[<span class="ruby-identifier">:auth</span>] <span class="ruby-operator">||</span> <span class="ruby-value str">'ANONYMOUS'</span>
-126: 
-127:     <span class="ruby-ivar">@capabilities</span>   = []
-128:     <span class="ruby-ivar">@login_mechs</span>    = []
-129:     <span class="ruby-ivar">@implementation</span> = <span class="ruby-value str">''</span>
-130:     <span class="ruby-ivar">@supports_tls</span>   = <span class="ruby-keyword kw">false</span>
-131:     <span class="ruby-ivar">@socket</span> = <span class="ruby-constant">TCPSocket</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@host</span>, <span class="ruby-ivar">@port</span>)
-132: 
-133:     <span class="ruby-identifier">data</span> = <span class="ruby-identifier">get_response</span>
-134:     <span class="ruby-identifier">server_features</span>(<span class="ruby-identifier">data</span>)
-135:     <span class="ruby-identifier">authenticate</span>
-136:     <span class="ruby-ivar">@password</span> = <span class="ruby-keyword kw">nil</span>
-137:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File managesieve.rb, line 125</span>
+125:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">info</span>)
+126:     <span class="ruby-ivar">@host</span>      = <span class="ruby-identifier">info</span>[<span class="ruby-identifier">:host</span>]
+127:     <span class="ruby-ivar">@port</span>      = <span class="ruby-identifier">info</span>[<span class="ruby-identifier">:port</span>] <span class="ruby-operator">||</span> <span class="ruby-value">2000</span>
+128:     <span class="ruby-ivar">@user</span>      = <span class="ruby-identifier">info</span>[<span class="ruby-identifier">:user</span>]
+129:     <span class="ruby-ivar">@euser</span>     = <span class="ruby-identifier">info</span>[<span class="ruby-identifier">:euser</span>] <span class="ruby-operator">||</span> <span class="ruby-ivar">@user</span>
+130:     <span class="ruby-ivar">@password</span>  = <span class="ruby-identifier">info</span>[<span class="ruby-identifier">:password</span>]
+131:     <span class="ruby-ivar">@auth_mech</span> = <span class="ruby-identifier">info</span>[<span class="ruby-identifier">:auth</span>] <span class="ruby-operator">||</span> <span class="ruby-value str">'ANONYMOUS'</span>
+132:     <span class="ruby-ivar">@tls</span>       = <span class="ruby-identifier">info</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">:tls</span>) <span class="ruby-operator">?</span> <span class="ruby-operator">!</span><span class="ruby-operator">!</span><span class="ruby-identifier">info</span>[<span class="ruby-identifier">:tls</span>] <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>
+133: 
+134:     <span class="ruby-ivar">@capabilities</span>   = []
+135:     <span class="ruby-ivar">@login_mechs</span>    = []
+136:     <span class="ruby-ivar">@implementation</span> = <span class="ruby-value str">''</span>
+137:     <span class="ruby-ivar">@supports_tls</span>   = <span class="ruby-keyword kw">false</span>
+138:     <span class="ruby-ivar">@socket</span>         = <span class="ruby-constant">TCPSocket</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@host</span>, <span class="ruby-ivar">@port</span>)
+139: 
+140:     <span class="ruby-identifier">data</span> = <span class="ruby-identifier">get_response</span>
+141:     <span class="ruby-identifier">server_features</span>(<span class="ruby-identifier">data</span>)
+142: 
+143:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@tls</span> <span class="ruby-keyword kw">and</span> <span class="ruby-keyword kw">not</span> <span class="ruby-identifier">supports_tls?</span>
+144:       <span class="ruby-identifier">raise</span> <span class="ruby-constant">SieveNetworkError</span>, <span class="ruby-value str">'Server does not support TLS'</span>
+145:       <span class="ruby-ivar">@socket</span>.<span class="ruby-identifier">close</span>
+146:     <span class="ruby-keyword kw">elsif</span> <span class="ruby-ivar">@tls</span> <span class="ruby-operator">!=</span> <span class="ruby-keyword kw">false</span>
+147:       <span class="ruby-ivar">@tls</span> = <span class="ruby-identifier">supports_tls?</span>
+148:       <span class="ruby-identifier">starttls</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@tls</span>
+149:     <span class="ruby-keyword kw">end</span>
+150: 
+151:     <span class="ruby-identifier">authenticate</span>
+152:     <span class="ruby-ivar">@password</span> = <span class="ruby-keyword kw">nil</span>
+153:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -328,10 +348,10 @@ Deletes <tt>script</tt> from the server.
             onclick="toggleCode('M000006-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000006-source">
 <pre>
-     <span class="ruby-comment cmt"># File managesieve.rb, line 173</span>
-173:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete_script</span>(<span class="ruby-identifier">script</span>)
-174:     <span class="ruby-identifier">send_command</span>(<span class="ruby-value str">'DELETESCRIPT'</span>, <span class="ruby-identifier">sieve_name</span>(<span class="ruby-identifier">script</span>))
-175:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File managesieve.rb, line 189</span>
+189:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete_script</span>(<span class="ruby-identifier">script</span>)
+190:     <span class="ruby-identifier">send_command</span>(<span class="ruby-value str">'DELETESCRIPT'</span>, <span class="ruby-identifier">sieve_name</span>(<span class="ruby-identifier">script</span>))
+191:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -368,15 +388,15 @@ Returns the contents of <tt>script</tt> as a string.
             onclick="toggleCode('M000004-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000004-source">
 <pre>
-     <span class="ruby-comment cmt"># File managesieve.rb, line 156</span>
-156:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_script</span>(<span class="ruby-identifier">script</span>)
-157:     <span class="ruby-keyword kw">begin</span>
-158:       <span class="ruby-identifier">data</span> = <span class="ruby-identifier">send_command</span>(<span class="ruby-value str">'GETSCRIPT'</span>, <span class="ruby-identifier">sieve_name</span>(<span class="ruby-identifier">script</span>))
-159:     <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">SieveCommandError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
-160:       <span class="ruby-identifier">raise</span> <span class="ruby-identifier">e</span>, <span class="ruby-node">&quot;Cannot get script: #{e}&quot;</span>
-161:     <span class="ruby-keyword kw">end</span>
-162:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">data</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">chomp</span>
-163:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File managesieve.rb, line 172</span>
+172:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_script</span>(<span class="ruby-identifier">script</span>)
+173:     <span class="ruby-keyword kw">begin</span>
+174:       <span class="ruby-identifier">data</span> = <span class="ruby-identifier">send_command</span>(<span class="ruby-value str">'GETSCRIPT'</span>, <span class="ruby-identifier">sieve_name</span>(<span class="ruby-identifier">script</span>))
+175:     <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">SieveCommandError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+176:       <span class="ruby-identifier">raise</span> <span class="ruby-identifier">e</span>, <span class="ruby-node">&quot;Cannot get script: #{e}&quot;</span>
+177:     <span class="ruby-keyword kw">end</span>
+178:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">data</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">chomp</span>
+179:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -400,16 +420,16 @@ size <tt>size</tt> and false otherwise.
             onclick="toggleCode('M000008-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000008-source">
 <pre>
-     <span class="ruby-comment cmt"># File managesieve.rb, line 184</span>
-184:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">have_space?</span>(<span class="ruby-identifier">script</span>, <span class="ruby-identifier">size</span>)
-185:     <span class="ruby-keyword kw">begin</span>
-186:       <span class="ruby-identifier">args</span> = <span class="ruby-identifier">sieve_name</span>(<span class="ruby-identifier">script</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">' '</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">size</span>.<span class="ruby-identifier">to_s</span>
-187:       <span class="ruby-identifier">send_command</span>(<span class="ruby-value str">'HAVESPACE'</span>, <span class="ruby-identifier">args</span>)
-188:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span>
-189:     <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">SieveCommandError</span>
-190:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span>
-191:     <span class="ruby-keyword kw">end</span>
-192:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File managesieve.rb, line 200</span>
+200:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">have_space?</span>(<span class="ruby-identifier">script</span>, <span class="ruby-identifier">size</span>)
+201:     <span class="ruby-keyword kw">begin</span>
+202:       <span class="ruby-identifier">args</span> = <span class="ruby-identifier">sieve_name</span>(<span class="ruby-identifier">script</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">' '</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">size</span>.<span class="ruby-identifier">to_s</span>
+203:       <span class="ruby-identifier">send_command</span>(<span class="ruby-value str">'HAVESPACE'</span>, <span class="ruby-identifier">args</span>)
+204:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span>
+205:     <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">SieveCommandError</span>
+206:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span>
+207:     <span class="ruby-keyword kw">end</span>
+208:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -432,11 +452,11 @@ Disconnect from the server.
             onclick="toggleCode('M000010-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000010-source">
 <pre>
-     <span class="ruby-comment cmt"># File managesieve.rb, line 200</span>
-200:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">logout</span>
-201:     <span class="ruby-identifier">send_command</span>(<span class="ruby-value str">'LOGOUT'</span>)
-202:     <span class="ruby-ivar">@socket</span>.<span class="ruby-identifier">close</span>
-203:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File managesieve.rb, line 216</span>
+216:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">logout</span>
+217:     <span class="ruby-identifier">send_command</span>(<span class="ruby-value str">'LOGOUT'</span>)
+218:     <span class="ruby-ivar">@socket</span>.<span class="ruby-identifier">close</span>
+219:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -459,12 +479,12 @@ Uploads <tt>script</tt> to the server, using <tt>data</tt> as its contents.
             onclick="toggleCode('M000005-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000005-source">
 <pre>
-     <span class="ruby-comment cmt"># File managesieve.rb, line 166</span>
-166:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">put_script</span>(<span class="ruby-identifier">script</span>, <span class="ruby-identifier">data</span>)
-167:     <span class="ruby-identifier">args</span> = <span class="ruby-identifier">sieve_name</span>(<span class="ruby-identifier">script</span>)
-168:     <span class="ruby-identifier">args</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">' '</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">sieve_string</span>(<span class="ruby-identifier">data</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">data</span>
-169:     <span class="ruby-identifier">send_command</span>(<span class="ruby-value str">'PUTSCRIPT'</span>, <span class="ruby-identifier">args</span>)
-170:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File managesieve.rb, line 182</span>
+182:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">put_script</span>(<span class="ruby-identifier">script</span>, <span class="ruby-identifier">data</span>)
+183:     <span class="ruby-identifier">args</span> = <span class="ruby-identifier">sieve_name</span>(<span class="ruby-identifier">script</span>)
+184:     <span class="ruby-identifier">args</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">' '</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">sieve_string</span>(<span class="ruby-identifier">data</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">data</span>
+185:     <span class="ruby-identifier">send_command</span>(<span class="ruby-value str">'PUTSCRIPT'</span>, <span class="ruby-identifier">args</span>)
+186:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -490,16 +510,16 @@ its name and status as parameters. Else, and array of [ <tt>name</tt>,
             onclick="toggleCode('M000002-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000002-source">
 <pre>
-     <span class="ruby-comment cmt"># File managesieve.rb, line 144</span>
-144:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">scripts</span>
-145:     <span class="ruby-keyword kw">begin</span>
-146:       <span class="ruby-identifier">scripts</span> = <span class="ruby-identifier">send_command</span>(<span class="ruby-value str">'LISTSCRIPTS'</span>)
-147:     <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">SieveCommandError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
-148:       <span class="ruby-identifier">raise</span> <span class="ruby-identifier">e</span>, <span class="ruby-node">&quot;Cannot list scripts: #{e}&quot;</span>
-149:     <span class="ruby-keyword kw">end</span>
-150:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">scripts</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">block_given?</span>
-151:     <span class="ruby-identifier">scripts</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">name</span>, <span class="ruby-identifier">status</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">yield</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">status</span>) }
-152:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File managesieve.rb, line 160</span>
+160:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">scripts</span>
+161:     <span class="ruby-keyword kw">begin</span>
+162:       <span class="ruby-identifier">scripts</span> = <span class="ruby-identifier">send_command</span>(<span class="ruby-value str">'LISTSCRIPTS'</span>)
+163:     <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">SieveCommandError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+164:       <span class="ruby-identifier">raise</span> <span class="ruby-identifier">e</span>, <span class="ruby-node">&quot;Cannot list scripts: #{e}&quot;</span>
+165:     <span class="ruby-keyword kw">end</span>
+166:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">scripts</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">block_given?</span>
+167:     <span class="ruby-identifier">scripts</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">name</span>, <span class="ruby-identifier">status</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">yield</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">status</span>) }
+168:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -522,10 +542,10 @@ Sets <tt>script</tt> as active.
             onclick="toggleCode('M000007-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000007-source">
 <pre>
-     <span class="ruby-comment cmt"># File managesieve.rb, line 178</span>
-178:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_active</span>(<span class="ruby-identifier">script</span>)
-179:     <span class="ruby-identifier">send_command</span>(<span class="ruby-value str">'SETACTIVE'</span>, <span class="ruby-identifier">sieve_name</span>(<span class="ruby-identifier">script</span>))
-180:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File managesieve.rb, line 194</span>
+194:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_active</span>(<span class="ruby-identifier">script</span>)
+195:     <span class="ruby-identifier">send_command</span>(<span class="ruby-value str">'SETACTIVE'</span>, <span class="ruby-identifier">sieve_name</span>(<span class="ruby-identifier">script</span>))
+196:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -548,10 +568,10 @@ Returns true if the server supports TLS and false otherwise.
             onclick="toggleCode('M000009-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000009-source">
 <pre>
-     <span class="ruby-comment cmt"># File managesieve.rb, line 195</span>
-195:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">supports_tls?</span>
-196:     <span class="ruby-ivar">@supports_tls</span>
-197:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File managesieve.rb, line 211</span>
+211:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">supports_tls?</span>
+212:     <span class="ruby-ivar">@supports_tls</span>
+213:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
