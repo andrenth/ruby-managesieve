@@ -211,7 +211,7 @@ class SieveCtl
   def add(script, file=nil, active=false)
     action = "add#{active ? 'active' : ''}"
     raise ArgumentError, "`#{action}' requires a script name" unless script
-    data = file ? File.open(file).readlines.to_s : STDIN.readlines.to_s
+    data = file ? File.open(file).readlines.join : STDIN.readlines.join
     unless @manage_sieve.have_space?(script, data.length)
       raise SieveCommandError, "not enough space for script `#{script}' " +
                                "(#{data.length} bytes)"

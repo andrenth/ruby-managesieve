@@ -175,7 +175,7 @@ class ManageSieve
     rescue SieveCommandError => e
       raise e, "Cannot get script: #{e}"
     end
-    return data.to_s.chomp
+    return data.join.chomp
   end
 
   # Uploads +script+ to the server, using +data+ as its contents.
