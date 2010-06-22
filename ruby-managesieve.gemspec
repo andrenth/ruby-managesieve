@@ -2,7 +2,7 @@ require 'rubygems'
 
 spec = Gem::Specification.new do |s|
   s.name = 'ruby-managesieve'
-  s.version = '0.4.1'
+  s.version = '0.4.2'
   s.summary = 'A Ruby library for the MANAGESIEVE protocol'
   s.description = <<-EOF
     ruby-managesieve is a pure-ruby implementation of the MANAGESIEVE protocol,

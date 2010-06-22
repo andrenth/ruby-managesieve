@@ -197,13 +197,9 @@ class SieveCtl
     @manage_sieve.set_active(script)
   end
 
-  # Deactivates +script+. There is no +DEACTIVATE+ command in the MANAGESIEVE
-  # draft, so we fetch the script, remove it and upload it again.
-  def deactivate(script)
-    raise ArgumentError, "`deactivate' requires a script name" unless script
-    data = @manage_sieve.get_script(script)
-    @manage_sieve.delete_script(script)
-    @manage_sieve.put_script(script, data)
+  # Deactivates the currently active script.
+  def deactivate
+    @manage_sieve.set_active(nil)
   end
 
   # Adds a script named +script+, from file +file+. If +file+ is +nil+, read
@@ -345,7 +341,7 @@ begin
   when /^cap(abilitie)?s$/
     sievectl.capabilities
   when /^deact(ivate)?$/
-    sievectl.deactivate(name)
+    sievectl.deactivate
   when /^del(ete)?$/
     sievectl.delete(name)
   when /^list$/
