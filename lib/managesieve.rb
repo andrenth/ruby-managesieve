@@ -95,7 +95,7 @@ class SieveResponseError < Exception; end
 #  __EOF__
 #
 #  # Test if there's enough space for script 'foobar'
-#  puts m.have_space?('foobar', script.length)
+#  puts m.have_space?('foobar', script.bytesize)
 #
 #  # Upload it
 #  m.put_script('foobar', script)
@@ -339,7 +339,7 @@ class ManageSieve
 
   private
   def sieve_string(string) # :nodoc:
-    return "{#{string.length}+}\r\n#{string}"
+    return "{#{string.bytesize}+}\r\n#{string}"
   end
 
   private
