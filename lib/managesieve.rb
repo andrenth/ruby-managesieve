@@ -75,7 +75,7 @@ class SieveResponseError < Exception; end
 #  # Create a new ManageSieve instance
 #  m = ManageSieve.new(
 #    :host     => 'sievehost.mydomain.com',
-#    :port     => 2000,
+#    :port     => 4190,
 #    :user     => 'johndoe',
 #    :password => 'secret',
 #    :auth     => 'PLAIN'
@@ -107,7 +107,7 @@ class SieveResponseError < Exception; end
 #  m.logout
 #
 class ManageSieve
-  SIEVE_PORT = 2000
+  SIEVE_PORT = 4190
 
   attr_reader :host, :port, :user, :euser, :capabilities, :login_mechs, :tls
 
@@ -115,7 +115,7 @@ class ManageSieve
   # following keys:
   #
   # [<i>:host</i>]      the sieve server
-  # [<i>:port</i>]      the sieve port (defaults to 2000)
+  # [<i>:port</i>]      the sieve port (defaults to 4190)
   # [<i>:user</i>]      the name of the user
   # [<i>:euser</i>]     the name of the effective user (defaults to +:user+)
   # [<i>:password</i>]  the password of the user
@@ -124,7 +124,7 @@ class ManageSieve
   #
   def initialize(info)
     @host      = info[:host]
-    @port      = info[:port] || 2000
+    @port      = info[:port] || 4190
     @user      = info[:user]
     @euser     = info[:euser] || @user
     @password  = info[:password]
