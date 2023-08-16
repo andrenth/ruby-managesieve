@@ -2,7 +2,7 @@ require 'rubygems'
 
 spec = Gem::Specification.new do |s|
   s.name = 'ruby-managesieve'
-  s.version = '0.4.2'
+  s.version = '0.4.3'
   s.summary = 'A Ruby library for the MANAGESIEVE protocol'
   s.description = <<-EOF
     ruby-managesieve is a pure-ruby implementation of the MANAGESIEVE protocol,
@@ -14,7 +14,7 @@ spec = Gem::Specification.new do |s|
   s.executables = ['sievectl']
   s.has_rdoc = true
   s.author = 'Andre Nathan'
-  s.email = 'andre@sneakymustard.com'
+  s.email = 'andre@hostnet.com.br'
   s.rubyforge_project = 'ruby-managesieve'
   s.homepage = "http://managesieve.rubyforge.org"
 end
