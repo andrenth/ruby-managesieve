@@ -5,8 +5,8 @@ require 'rbconfig'
 
 lib = 'lib/managesieve.rb'
 bin = 'bin/sievectl'
-libdir = Config::CONFIG['sitelibdir']
-bindir = Config::CONFIG['bindir']
+libdir = RbConfig::CONFIG['sitelibdir']
+bindir = RbConfig::CONFIG['bindir']
 
 begin
   puts "#{lib} -> #{libdir}"
