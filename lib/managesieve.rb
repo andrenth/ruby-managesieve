@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 #
 #--
-# Copyright (c) 2004-2009 Andre Nathan <andre@digirati.com.br>
+# Copyright (c) 2004-2023 Andre Nathan <andre@digirati.com.br>
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above

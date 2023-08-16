@@ -1,5 +1,4 @@
 #!/usr/bin/env/ruby
-# $Id: example.rb,v 1.1 2004/12/20 17:49:51 andre Exp $
 
 require 'managesieve'
 
